@@ -1,0 +1,18 @@
+# Ambiente virtual
+.venv/
+venv/
+
+# Cache do Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Arquivos de configuração locais
+.env
+
+# Banco de dados local
+*.db
+*.sqlite3
+
+# Migrations (se não quiser na main)
+migrations/
