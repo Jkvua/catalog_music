@@ -1,5 +1,5 @@
 from flask import Flask
-from app.extensions import db, migrate  
+from app.extensions import db, migrate, ma 
 from config import DevelopmentConfig, TestingConfig, ProductionConfig
 
 def create_app(config_class=DevelopmentConfig):
@@ -8,6 +8,7 @@ def create_app(config_class=DevelopmentConfig):
 
     db.init_app(app)
     migrate.init_app(app, db)
+    ma.init_app(app)
 
     with app.app_context():
         from . import models
