@@ -7,8 +7,9 @@ class Avaliacao(db.Model):
     comentario = db.Column(db.Text)
     data_escuta = db.Column(db.Date)
 
-    usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id"))
     album_id = db.Column(db.Integer, db.ForeignKey("albuns.id"))
-
-    usuario = db.relationship("Usuario", back_populates="avaliacoes")
     album = db.relationship("Album", back_populates="avaliacoes")
+
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id"))
+    usuario = db.relationship("Usuario", back_populates="avaliacoes")
+    

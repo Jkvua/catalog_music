@@ -10,4 +10,5 @@ class Album(db.Model):
     artista_id = db.Column(db.Integer, db.ForeignKey('artistas.id'), nullable=False)
     
     artista = db.relationship('Artista', back_populates='albuns')
-    musica = db.relationship('Musica', back_populates='album', cascade="all, delete-orphan")
+    musicas = db.relationship('Musica', back_populates='album', cascade="all, delete-orphan")
+    avaliacoes = db.relationship("Avaliacao", back_populates="album", cascade="all, delete-orphan")
