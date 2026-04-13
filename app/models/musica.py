@@ -5,7 +5,7 @@ class Musica(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     titulo = db.Column(db.String(150), nullable=False)
-    duracao = db.Column(db.Integer)
+    duracao = db.Column(db.String(20), nullable=False)
     #faixa = db.Column(db.Integer)
 
     album_id = db.Column(db.Integer, db.ForeignKey("albuns.id"))

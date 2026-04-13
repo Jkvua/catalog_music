@@ -11,7 +11,7 @@ class MusicaSchema(ma.SQLAlchemyAutoSchema):
         sqla_session = db.session
         
     titulo = fields.String(required=True, validate=validate.Length(min=1, max=200))
-    duracao = fields.Integer(required=True, validate=validate.Range(min=1))
+    duracao = fields.String(required=True, validate=validate.Length(min=1, max=30))
 
 musica_schema = MusicaSchema()
 musicas_schema = MusicaSchema(many=True)

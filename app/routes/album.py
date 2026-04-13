@@ -12,9 +12,9 @@ def get_albuns():
 
 @album_bp.route('/', methods=['POST'])
 def create_album():
-
+    json_data = request.get_json()
     try:
-        novo_album = album_schema.load(request.get_json())
+        novo_album = album_schema.load(json_data)
     
         db.session.add(novo_album)
         db.session.commit()
