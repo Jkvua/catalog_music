@@ -31,4 +31,6 @@ def create_app(config_class=DevelopmentConfig):
     from .routes.musica import musica_bp
     app.register_blueprint(musica_bp)
 
+    
+
     return app

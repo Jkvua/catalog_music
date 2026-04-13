@@ -1,31 +1,25 @@
 from flask import Blueprint, request, jsonify
 from app.extensions import db
 from app.models.musica import Musica
+from app.schemas.musica import musica_schema, musicas_schema
 
 musica_bp = Blueprint('musica', __name__, url_prefix='/musicas')
 
 @musica_bp.route('/', methods=['GET'])
 def get_musicas():
-    musica = Musica.query.all()
-    return jsonify([{"id": musica.id, "titulo": musica.titulo} for musica in musica])
+    todas_musica = Musica.query.all()
+    return jsonify(musicas_schema.dump(todas_musica))
 
 def create_musica():
-    data = request.get_json()
-    nova = Musica(titulo=data["titulo"],
-                   duracao=data.get("duracao"),
-                   genero=data.get("genero"),
-                   artista_id=data.get("artista_id"),
-                   album_id=data.get("album_id")
-        )
+    json_data = request.get_json()
+    try:
+        nova_musica = musica_schema.load(json_data)
     
-    db.session.add(nova)
-    db.session.commit()
+        db.session.add(nova_musica)
+        db.session.commit()
 
-    return jsonify({
-        "id": nova.id, 
-        "titulo": nova.titulo,
-        "duracao": nova.duracao,
-        "genero": nova.genero,
-        "artista_id": nova.artista_id,
-        "album_id": nova.album_id
-    }), 201
+        return musica_schema.dump(nova_musica), 201
+    
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 400
