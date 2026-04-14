@@ -10,6 +10,11 @@ def get_musicas():
     todas_musica = Musica.query.all()
     return jsonify(musicas_schema.dump(todas_musica))
 
+@musica_bp.route('/<int:id>', methods=['GET'])
+def get_musica(id):
+    musica = Musica.query.get_or_404(id)
+    return jsonify(musica_schema.dump(musica))
+
 @musica_bp.route('/', methods=['POST'])
 def create_musica():
     json_data = request.get_json()

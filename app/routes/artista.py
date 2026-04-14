@@ -10,6 +10,11 @@ def get_artistas():
     todos_artistas = Artista.query.all()
     return jsonify(artistas_schema.dump(todos_artistas))
 
+@artista_bp.route('/<int:id>', methods=['GET'])
+def get_artista_id(id):
+    artista = Artista.query.get_or_404(id)
+    return jsonify(artista_schema.dump(artista))
+
 @artista_bp.route('/', methods=['POST'])
 def create_artista():
     json_data = request.get_json()

@@ -10,6 +10,11 @@ def get_albuns():
     todos_albuns = Album.query.all()
     return jsonify(albums_schema.dump(todos_albuns))
 
+@album_bp.route('/<int:id>', methods=['GET'])
+def get_album_id(id):
+    album = Album.query.get_or_404(id)
+    return jsonify(album_schema.dump(album))
+
 @album_bp.route('/', methods=['POST'])
 def create_album():
     json_data = request.get_json()
