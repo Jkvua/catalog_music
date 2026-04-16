@@ -3,6 +3,7 @@ from app.extensions import db
 from app.models.album import Album
 from app.schemas.album import album_schema, albums_schema
 
+
 album_bp = Blueprint('album', __name__, url_prefix='/albuns')
 
 @album_bp.route('/', methods=['GET'])
@@ -29,3 +30,31 @@ def create_album():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 400
+
+@album_bp.route('/<int:id>', methods=['PUT'])
+def edit_album(id):
+    album = Album.query.get_or_404(id)
+
+    data = request.get_json()
+    album.titulo = data.get('titulo', album.titulo)
+    album.artista = data.get('artista', album.artista)
+    album.ano = data.get('ano', album.ano)
+
+    db.session.commit()
+    return jsonify({
+        "album": album_schema.dump(album),
+        "message": "O álbum foi atualizado com sucesso"
+    })
+
+
+@album_bp.route('/<int:id>', methods=['DELETE'])
+def delete_album(id):
+    album = Album.query.get_or_404(id)
+    nome_album = album.titulo
+    
+    db.session.delete(album)
+    db.session.commit()
+
+    return jsonify({
+        "message": f"O álbum '{nome_album}' foi deletado com sucesso"
+    })
