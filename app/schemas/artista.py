@@ -14,5 +14,7 @@ class ArtistaSchema(ma.SQLAlchemyAutoSchema):
     genero = fields.String(required=True, dump_default="Desconhecido")
     pais = fields.String(required=True, validate=validate.Length(min=1, max=100))
 
+    albuns = fields.Nested('AlbumSchema', many=True, only=['titulo']) #-- para mostrar os álbuns do artista
+
 artista_schema = ArtistaSchema()
 artistas_schema = ArtistaSchema(many=True)

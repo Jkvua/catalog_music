@@ -9,3 +9,4 @@ class Artista(db.Model):
     pais = db.Column(db.String(50))
 
     albuns = db.relationship('Album', back_populates='artista', cascade="all, delete-orphan")
+    musicas = db.relationship('Musica', back_populates='artista')

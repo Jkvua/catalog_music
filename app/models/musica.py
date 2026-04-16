@@ -10,3 +10,7 @@ class Musica(db.Model):
 
     album_id = db.Column(db.Integer, db.ForeignKey("albuns.id"))
     album = db.relationship("Album", back_populates="musicas")
+
+    artista_id = db.Column(db.Integer, db.ForeignKey("artistas.id"))
+    artista = db.relationship("Artista", back_populates="musicas")
+    

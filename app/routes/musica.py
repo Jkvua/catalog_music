@@ -1,19 +1,19 @@
 from flask import Blueprint, request, jsonify
 from app.extensions import db
 from app.models.musica import Musica
-from app.schemas.musica import musica_schema, musicas_schema
+from app.schemas.musica import musica_schema, musicas_schema, musica_output_schema, musicas_output_schema
 
 musica_bp = Blueprint('musica', __name__, url_prefix='/musicas')
 
 @musica_bp.route('/', methods=['GET'])
 def get_musicas():
     todas_musica = Musica.query.all()
-    return jsonify(musicas_schema.dump(todas_musica))
+    return jsonify(musicas_output_schema.dump(todas_musica))
 
 @musica_bp.route('/<int:id>', methods=['GET'])
 def get_musica(id):
     musica = Musica.query.get_or_404(id)
-    return jsonify(musica_schema.dump(musica))
+    return jsonify(musica_output_schema.dump(musica))
 
 @musica_bp.route('/', methods=['POST'])
 def create_musica():
