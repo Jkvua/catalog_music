@@ -29,4 +29,32 @@ def create_avaliacao():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
     
+@avaliacao_bp.route('/<int:id>', methods=['PUT'])
+def edit_avaliacao(id):
+    avaliacao = Avaliacao.query.get_or_404(id)
+
+    data = request.get_json()
+    avaliacao.nota = data.get('nota', avaliacao.nota)
+    avaliacao.comentario = data.get('comentario', avaliacao.comentario)
+    avaliacao.data_escuta = data.get('data_escuta', avaliacao.data_escuta)
+
+    db.session.commit()
+    return jsonify({
+        "avaliacao": avaliacao_schema.dump(avaliacao),
+        "message": "A avaliação foi atualizada com sucesso"
+    })    
+    
+@avaliacao_bp.route('/<int:id>', methods=['DELETE'])
+def delete_avaliacao(id):
+    avaliacao = Avaliacao.query.get_or_404(id)
+    nota_avaliacao = avaliacao.nota
+    
+    nome_album = avaliacao.album.titulo if avaliacao.album else "Desconecido"
+
+    db.session.delete(avaliacao)
+    db.session.commit()
+
+    return jsonify({
+        "message": f"A avaliação com nota '{nota_avaliacao}' do álbum '{nome_album}' foi deletada com sucesso"
+    })
     

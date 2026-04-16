@@ -30,3 +30,36 @@ def create_artista():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
     
+@artista_bp.route('/<int:id>', methods=['PUT'])
+def edit_artista(id):
+    artista = Artista.query.get_or_404(id)
+
+    data = request.get_json()
+    artista.nome = data.get('nome', artista.nome)
+    artista.pais = data.get('pais', artista.pais)
+    artista.genero = data.get('genero', artista.genero)
+    
+    artista.albuns = data.get('albuns', artista.albuns)
+    
+    db.session.commit()
+
+    return jsonify({
+        "artista": artista_schema.dump(artista),
+        "message": "Os dados do artista foram atualizados com sucesso"
+    })
+
+@artista_bp.route('/<int:id>', methods=['DELETE'])
+def delete_artista(id):
+    artista = Artista.query.get_or_404(id)
+    nome_artista = artista.nome
+
+    db.session.delete(artista)
+    db.session.commit()
+
+    return jsonify({
+        "message": f"O artista '{nome_artista}' foi deletado com sucesso"
+    })
+
+
+
+    
