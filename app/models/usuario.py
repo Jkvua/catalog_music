@@ -8,4 +8,4 @@ class Usuario(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
 
-    avaliacoes = db.relationship("Avaliacao", back_populates="usuario")
+    avaliacoes = db.relationship("Avaliacao", back_populates="usuario",cascade="all, delete-orphan")
