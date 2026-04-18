@@ -1,4 +1,5 @@
 from app.models.artista import Artista
+from app.models.album import Album
 from app.extensions import db
 
 class ArtistaService:

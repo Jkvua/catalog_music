@@ -24,7 +24,10 @@ def create_artista():
     if status == 400:
         return jsonify(resultado), 400
     
-    return artista_schema.dump(resultado), 201  
+    return jsonify({
+        "musica": artista_schema.dump(resultado),
+        "message": "O artista foi criado com sucesso"
+    }), status
     
 @artista_bp.route('/<int:id>', methods=['PUT'])
 def edit_artista(id):

@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.extensions import db
 from app.models.musica import Musica
+from app.services.musica import MusicaService
 from app.schemas.musica import musica_schema, musicas_schema, musica_output_schema, musicas_output_schema
 
 musica_bp = Blueprint('musica', __name__, url_prefix='/musicas')
@@ -17,44 +18,34 @@ def get_musica(id):
 
 @musica_bp.route('/', methods=['POST'])
 def create_musica():
-    json_data = request.get_json()
-    try:
-        nova_musica = musica_schema.load(json_data)
+    dados = request.get_json()
     
-        db.session.add(nova_musica)
-        db.session.commit()
-
-        return musica_schema.dump(nova_musica), 201
+    resultado, status = MusicaService.criar_musica(dados)
+    if status == 201:
+        return jsonify(resultado), 201
     
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": str(e)}), 400
+    return jsonify({
+        "musica": musica_schema.dump(resultado),
+        "message": "A música foi criada com sucesso"
+    }), status
 
 @musica_bp.route('/<int:id>', methods=['PUT'])
 def edit_musica(id):
-    musica = Musica.query.get_or_404(id)
-
     data = request.get_json()
-    musica.titulo = data.get('titulo', musica.titulo)
-    musica.duracao = data.get('duracao', musica.duracao)
-    musica.album_id = data.get('album_id', musica.album_id)
-    musica.artista_id = data.get('artista_id', musica.artista_id)
-
-    db.session.commit()
+    
+    resultado, status = MusicaService.editar_musica(id, data)
+    if status == 400:
+        return jsonify(resultado), 400
+    
     return jsonify({
-        "musica": musica_schema.dump(musica),
-        "artista": musica.artista.nome if musica.artista else "Artista não encontrado",
+        "musica": musica_schema.dump(resultado),
         "message": "Os dados da música foram atualizados com sucesso"
-    })
+    }), status
 
 @musica_bp.route('/<int:id>', methods=['DELETE'])
 def delete_musica(id):
-    musica = Musica.query.get_or_404(id)
-    titulo_musica = musica.titulo
-
-    db.session.delete(musica)
-    db.session.commit()
+    resultado, status = MusicaService.deletar_musica(id)
 
     return jsonify({
-        "message": f"A música '{titulo_musica}' foi deletada com sucesso"
-    })
+        "message": f"A música '{resultado}' foi deletada com sucesso"
+    }), status
