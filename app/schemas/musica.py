@@ -3,6 +3,7 @@ from app.models.musica import Musica
 from app.schemas.album import AlbumSchema
 from app.schemas.artista import ArtistaSchema
 from marshmallow import fields, validate
+
 class MusicaInputSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Musica

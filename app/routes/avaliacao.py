@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.extensions import db
 from app.models.avaliacao import Avaliacao
+from app.services.avaliacoes import AvaliacaoService
 from app.schemas.avaliacao import avaliacao_schema, avaliacoes_schema
 
 avaliacao_bp = Blueprint('avaliacao', __name__, url_prefix='/avaliacoes')
@@ -17,44 +18,34 @@ def get_avaliacao(id):
 
 @avaliacao_bp.route('/', methods=['POST'])
 def create_avaliacao():
-    json_data = request.get_json()
-    try:
-        nova_avaliacao = avaliacao_schema.load(json_data)
-
-        db.session.add(nova_avaliacao)
-        db.session.commit()
-
-        return jsonify(avaliacao_schema.dump(nova_avaliacao)), 201
+    data = request.get_json()
     
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
+    resultado, status = AvaliacaoService.criar_avaliacao(data)
+    if status == 400:
+        return jsonify(resultado), status
     
+    return jsonify({
+        "avaliacao": avaliacao_schema.dump(resultado),
+        "message": "A avaliação foi criada com sucesso"
+    }), status
+
 @avaliacao_bp.route('/<int:id>', methods=['PUT'])
 def edit_avaliacao(id):
-    avaliacao = Avaliacao.query.get_or_404(id)
-
-    data = request.get_json()
-    avaliacao.nota = data.get('nota', avaliacao.nota)
-    avaliacao.comentario = data.get('comentario', avaliacao.comentario)
-    avaliacao.data_escuta = data.get('data_escuta', avaliacao.data_escuta)
-
-    db.session.commit()
+    data = request.get_json(id)
+    
+    resultado, status = AvaliacaoService.editar_avaliacao(id, data)
+    if status == 400:
+        return jsonify(resultado), status
     return jsonify({
-        "avaliacao": avaliacao_schema.dump(avaliacao),
-        "message": "A avaliação foi atualizada com sucesso"
-    })    
+        "avaliacao": avaliacao_schema.dump(resultado),
+        "message": "Os dados da avaliação foram atualizados com sucesso"
+    }), status
     
 @avaliacao_bp.route('/<int:id>', methods=['DELETE'])
 def delete_avaliacao(id):
-    avaliacao = Avaliacao.query.get_or_404(id)
-    nota_avaliacao = avaliacao.nota
-    
-    nome_album = avaliacao.album.titulo if avaliacao.album else "Desconecido"
-
-    db.session.delete(avaliacao)
-    db.session.commit()
+    avaliacao, status = AvaliacaoService.delete_avaliacao(id)
 
     return jsonify({
-        "message": f"A avaliação com nota '{nota_avaliacao}' do álbum '{nome_album}' foi deletada com sucesso"
-    })
+        "message": f"A avaliação {avaliacao.id} sobre o álbum {avaliacao.album.titulo}'foi deletada com sucesso"
+    }), status
     
