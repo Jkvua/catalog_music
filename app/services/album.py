@@ -16,7 +16,7 @@ class AlbumService:
         
         artista = Artista.query.get(artista_id)
         if not artista:
-            return {"error": f"Artista com ID {artista_id} não encontrado"}, 404
+            return {"error": f"Artista {artista_id} não foi encontrado"}, 404
        
         if not ano_lancamento:
             return {"error": "O ano de lançamento do álbum é obrigatório"}, 400
@@ -25,7 +25,7 @@ class AlbumService:
             ano_lancamento = int(ano_lancamento)
             if ano_lancamento < 1900 or ano_lancamento > 2100:
                 return {"error": "O ano de lançamento deve ser entre 1900 e 2100"}, 400
-        except (ValueError, TypeError):
+        except (ValueError, AttributeError):
             return {"error": "O ano de lançamento deve ser um número inteiro"}, 400
         
         existente = Album.query.filter_by(titulo=titulo, artista_id=artista_id).first()

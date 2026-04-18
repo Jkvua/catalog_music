@@ -25,7 +25,7 @@ class MusicaService:
 
             if minutos < 0 or segundos < 0 or segundos >= 60:
                 return {"error": "Formato de duração da música inválido, use MM:SS"}, 400
-        except Exception:
+        except (ValueError, AttributeError):
             return {"error": "A duração da música está em um formato inválido, use MM:SS"}, 400
         
         album = Album.query.get(album_id)   
@@ -74,7 +74,7 @@ class MusicaService:
                 if minutos < 0 or segundos < 0 or segundos >= 60:
                     return {"error": "Formato de duração da música inválido, use MM:SS"}, 400
                 musica.duracao = nova_duracao.strip()
-            except Exception:
+            except (ValueError, AttributeError):
                 return {"error": "A duração da música está em um formato inválido, use MM:SS"}, 400
         
         if 'album_id' in dados:
