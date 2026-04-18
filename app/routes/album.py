@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.extensions import db
 from app.models.album import Album
+from app.services.album import AlbumService
 from app.schemas.album import album_schema, albums_schema
 
 
@@ -18,43 +19,34 @@ def get_album_id(id):
 
 @album_bp.route('/', methods=['POST'])
 def create_album():
-    json_data = request.get_json()
-    try:
-        novo_album = album_schema.load(json_data)
+    dados = request.get_json()
+    resultado, status = AlbumService.criar_album(dados)
     
-        db.session.add(novo_album)
-        db.session.commit()
-
-        return album_schema.dump(novo_album), 201
-
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": str(e)}), 400
+    if status != 400:
+        return jsonify(resultado), status
+    
+    return jsonify({
+        "album": album_schema.dump(resultado),
+        "message": "O álbum foi criado com sucesso"
+    }), status
 
 @album_bp.route('/<int:id>', methods=['PUT'])
 def edit_album(id):
-    album = Album.query.get_or_404(id)
-
-    data = request.get_json()
-    album.titulo = data.get('titulo', album.titulo)
-    album.artista = data.get('artista', album.artista)
-    album.ano = data.get('ano', album.ano)
-
-    db.session.commit()
+    dados = request.get_json()
+    resultado, status = AlbumService.editar_album(id, dados)
+    
+    if status != 400:
+        return jsonify(resultado), status
+    
     return jsonify({
-        "album": album_schema.dump(album),
+        "album": album_schema.dump(resultado),
         "message": "O álbum foi atualizado com sucesso"
-    })
-
+    }), status
 
 @album_bp.route('/<int:id>', methods=['DELETE'])
 def delete_album(id):
-    album = Album.query.get_or_404(id)
-    nome_album = album.titulo
-    
-    db.session.delete(album)
-    db.session.commit()
-
+    resultado, status = AlbumService.deletar_album(id)
     return jsonify({
-        "message": f"O álbum '{nome_album}' foi deletado com sucesso"
-    })
+        "message": f"O álbum '{resultado.titulo}' foi deletado com sucesso"
+    }), status
+    
