@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.extensions import db
 from app.models.artista import Artista
+from app.services.artista import ArtistaService
 from app.schemas.artista import artista_schema, artistas_schema
 
 artista_bp = Blueprint('artista', __name__, url_prefix='/artistas')
@@ -17,49 +18,34 @@ def get_artista_id(id):
 
 @artista_bp.route('/', methods=['POST'])
 def create_artista():
-    json_data = request.get_json()
+    dados = request.get_json()
 
-    try:
-        novo_artista = artista_schema.load(json_data)
-
-        db.session.add(novo_artista)
-        db.session.commit()
-
-        return artista_schema.dump(novo_artista), 201
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
+    resultado, status = ArtistaService.criar_artista(dados)
+    if status == 400:
+        return jsonify(resultado), 400
+    
+    return artista_schema.dump(resultado), 201  
     
 @artista_bp.route('/<int:id>', methods=['PUT'])
 def edit_artista(id):
-    artista = Artista.query.get_or_404(id)
-
-    data = request.get_json()
-    artista.nome = data.get('nome', artista.nome)
-    artista.pais = data.get('pais', artista.pais)
-    artista.genero = data.get('genero', artista.genero)
+    data = request.get_json(id)
     
-    artista.albuns = data.get('albuns', artista.albuns)
-    
-    db.session.commit()
+    resultado, status = ArtistaService.criar_artista(id, data)
+    if status == 400:
+        return jsonify(resultado), 400
 
     return jsonify({
-        "artista": artista_schema.dump(artista),
+        "artista": artista_schema.dump(resultado),
         "message": "Os dados do artista foram atualizados com sucesso"
-    })
+    }), status
 
 @artista_bp.route('/<int:id>', methods=['DELETE'])
 def delete_artista(id):
-    artista = Artista.query.get_or_404(id)
-    nome_artista = artista.nome
-
-    db.session.delete(artista)
-    db.session.commit()
+    resultado, status = ArtistaService.deletar_artista(id)
 
     return jsonify({
-        "message": f"O artista '{nome_artista}' foi deletado com sucesso"
-    })
-
+        "message": f"O artista {resultado.nome} foi deletado com sucesso"
+    }), status
 
 
     
