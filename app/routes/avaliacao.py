@@ -36,6 +36,7 @@ def edit_avaliacao(id):
     resultado, status = AvaliacaoService.editar_avaliacao(id, data)
     if status == 400:
         return jsonify(resultado), status
+    
     return jsonify({
         "avaliacao": avaliacao_schema.dump(resultado),
         "message": "Os dados da avaliação foram atualizados com sucesso"
