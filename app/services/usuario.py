@@ -17,14 +17,14 @@ class UsuarioService:
 
         if not user or not email or not full_password:
             return {"error": "Os campos 'user', 'email' e 'password' são obrigatórios"}, 400
-        if UsuarioService.validar_email(email):
+        if not UsuarioService.validar_email(email):
             return {"error": "O email fornecido é inválido"}, 400
 
         existente = Usuario.query.filter_by(email=email).first()
         if existente:
             return {"error": f"O email {email} já está em uso"}, 400
         
-        existente_user = Usuario.query.filter_by(nome=user).first()
+        existente_user = Usuario.query.filter_by(user=user).first()
         if existente_user:
             return {"error": f"O nome de usuário {user} já está em uso"}, 400
         
@@ -32,7 +32,7 @@ class UsuarioService:
         
         try:
             novo_usuario = Usuario(
-                nome=user.strip(),
+                user=user.strip(),
                 email=email.strip(),
                 password=password_hash
             )
@@ -50,7 +50,7 @@ class UsuarioService:
             return {"error": f"Usuário não encontrado"}, 404
 
         if "user"  in dados:
-            usuario.nome = dados["user"].strip()
+            usuario.user = dados["user"].strip()
 
         if "email" in dados:
             novo_email = dados["email"].strip()
@@ -73,4 +73,4 @@ class UsuarioService:
 
         db.session.delete(usuario)
         db.session.commit()
-        return {"message": f"Usuário {usuario.nome} e todos os seus dados foram excluídos com sucesso"}, 200
+        return {"message": f"Usuário {usuario.user} e todos os seus dados foram excluídos com sucesso"}, 200

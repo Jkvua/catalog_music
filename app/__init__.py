@@ -1,5 +1,6 @@
 from flask import Flask
 from app.extensions import db, migrate, ma 
+from .errors import register_errors
 from config import DevelopmentConfig, TestingConfig, ProductionConfig
 
 def create_app(config_class=DevelopmentConfig):
@@ -31,6 +32,6 @@ def create_app(config_class=DevelopmentConfig):
     from .routes.musica import musica_bp
     app.register_blueprint(musica_bp)
 
-    
+    register_errors(app)
 
     return app

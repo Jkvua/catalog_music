@@ -7,14 +7,14 @@ class ArtistaService:
     def criar_artista(dados):
         nome = dados.get('nome')
         genero = dados.get('genero')
-        nacionalidade = dados.get('nacionalidade')
+        pais = dados.get('pais')
         
         if not nome or len(nome.strip()) < 1:
             return {"error": "O nome do artista é obrigatório e deve conter pelo menos 1 caractere"}, 400
         if not genero:
             return {"error": "O gênero musical do artista é obrigatório"}, 400
-        if not nacionalidade:
-            return {"error": "A nacionalidade do artista é obrigatória"}, 400
+        if not pais:
+            return {"error": "A nacionalidade/país do artista é obrigatória"}, 400
         
         existente = Artista.query.filter_by(nome=nome).first()
         if existente:
@@ -22,8 +22,8 @@ class ArtistaService:
         
         novo_artista = Artista(
             nome=nome.strip(), 
-            genero=dados.strip(),
-            nacionalidade=nacionalidade.strip()
+            genero=genero.strip(),
+            pais=pais.strip()
         )
 
         db.session.add(novo_artista)
@@ -49,9 +49,9 @@ class ArtistaService:
             return {"error": "O gênero musical do artista é obrigatório"}, 400
         artista.genero = dados.get('genero', artista.genero)
         
-        if 'nacionalidade' in dados and not dados['nacionalidade']:
-            return {"error": "A nacionalidade do artista é obrigatória"}, 400
-        artista.nacionalidade = dados.get('nacionalidade', artista.nacionalidade)
+        if 'pais' in dados and not dados['pais']:
+            return {"error": "A nacionalidade/país do artista é obrigatória"}, 400
+        artista.pais = dados.get('pais', artista.pais)
 
         db.session.commit()
         
