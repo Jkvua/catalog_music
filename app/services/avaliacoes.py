@@ -61,8 +61,10 @@ class AvaliacaoService:
         nova_avaliacao = Avaliacao(
             nota=nota, 
             comentario=comentario.strip(), 
+            data_escuta=data_escuta,
             usuario_id=usuario.id, 
             album_id=album.id
+            
             )
         
         db.session.add(nova_avaliacao)
@@ -74,23 +76,22 @@ class AvaliacaoService:
     def editar_avaliacao(id, dados):
         avaliacao = Avaliacao.query.get_or_404(id)
 
-        if not avaliacao:
-            return {"error": f"A avaliação não foi encontrada"}, 404
-
         nova_nota = dados.get('nota')
         if nova_nota is not None and (nova_nota < 1 or nova_nota > 5):
             return {"error": "A nota da avaliação deve ser um número entre 1 e 5"}, 400
+        avaliacao.nota = nova_nota.strip()
         
         if "comentario" in dados:
             novo_comentario = dados.get('comentario')
             if not novo_comentario:
                 return {"error": "O comentário da avaliação é obrigatório"}, 400
+            avaliacao.comentario = novo_comentario.strip()
 
         if "data_escuta" in dados:
             data_escuta_str = dados.get("data_escuta")
             if data_escuta_str:
                 try:
-                    data_escuta = datetime.strptime(data_escuta_str, "%Y-%m-%d").date()
+                    avaliacao.data_escuta = datetime.strptime(data_escuta_str, "%Y-%m-%d").date()
                 except ValueError:
                     return {"error": "Formato de data inválido, use YYYY-MM-DD"}, 400
             else:
