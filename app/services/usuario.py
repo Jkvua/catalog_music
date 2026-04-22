@@ -39,7 +39,9 @@ class UsuarioService:
 
             db.session.add(novo_usuario)
             db.session.commit()
+            
             return novo_usuario, 201
+        
         except Exception as e:
             db.session.rollback()
             return {"error": "Ocorreu um erro ao criar o usuário"}, 500

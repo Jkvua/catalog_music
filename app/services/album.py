@@ -34,7 +34,7 @@ class AlbumService:
         else:
             return {"Error": f"É necessario informar o nome do artista ou o ID do artista"}, 400
                 
-        existente = Album.query.filter_by(titulo=titulo, artista_id=artista_id).first()
+        existente = Album.query.filter_by(titulo=titulo, artista_id=artista.id).first()
         if existente:
             return {"error": f"O Álbum {titulo} já existe para esse artista"}, 400
         

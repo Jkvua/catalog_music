@@ -9,14 +9,15 @@ class MusicaService:
         titulo = dados.get('titulo')
         duracao = dados.get('duracao')
         album_id = dados.get('album_id')
+        album_nome = dados.get('album')
         artista_id = dados.get('artista_id')
+        artista_nome = dados.get('artista')
+
 
         if not titulo or len(titulo.strip()) < 1:
             return {"error": "O título da música é obrigatório e deve conter pelo menos 1 caractere"}, 400
         if not duracao:
             return {"error": "A duração da música é obrigatória (formato MM:SS)"}, 400
-        if not album_id:
-            return {"error": "É obrigatório informar o álbum"}, 400
 
         try:
             minutos, segundos = duracao.split(':')
@@ -28,21 +29,39 @@ class MusicaService:
         except (ValueError, AttributeError):
             return {"error": "A duração da música está em um formato inválido, use MM:SS"}, 400
         
-        album = Album.query.get(album_id)   
-        if not album:
-            return {"error": f"Álbum com ID {album_id} não encontrado"}, 404
+        album = None
+        if album_id:
+            album = Album.query.get(album_id)   
+            if not album:
+                return {"error": f"Álbum com ID {album_id} não encontrado"}, 404
+        if album_nome:
+            album = Album.query.filter_by(titulo=album_nome.strip()).first()
+            if not album:
+                return {"error": f"Album {album_nome} não encontrado"}, 404
+        else:
+            return {"error": f"É necessário informar o nome do album ou o ID do album"}
 
-        artista = Artista.query.get(artista_id)
-        if not artista:
-            return {"error": f"Artista com ID {artista_id} não encontrado"}, 404
-        if not artista_id:
-            return {"error": "É obrigatório informar o artista"}, 400
+        artista = None
+        if artista_id:
+            artista = Artista.query.get(artista_id)
+            if not artista:
+                return {"error": f"Artista com ID {artista_id} não encontrado"}, 404
+        if artista_nome:
+            artista = Artista.query.filter_by(nome=artista_nome.strip()).first()
+            if not artista:
+                return {"error": f"Artista {artista_nome} não encontrado"}, 404
+        else:
+            return {"error": f"É necessario informar o nome do artista ou o ID do artista"}, 400
+
+        existente = Musica.query.filter_by(titulo=titulo.strip(), artista_id=artista.id, album_id=album.id).first()
+        if existente:
+            return {"error": f"A música {titulo} ja existe para esse artista ou já existe nesse album"}
 
         nova_musica = Musica(
             titulo=titulo.strip(),
             duracao=duracao,
-            album_id=album_id,
-            artista_id=artista_id
+            album_id=album.id,
+            artista_id=artista.id
         )
 
         db.session.add(nova_musica)
