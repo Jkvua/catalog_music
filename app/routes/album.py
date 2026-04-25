@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.extensions import db
+from flask_jwt_extended import jwt_required
 from app.models.album import Album
 from app.services.album import AlbumService
 from app.schemas.album import album_schema, albums_schema
@@ -18,6 +19,7 @@ def get_album_id(id):
     return jsonify(album_schema.dump(album))
 
 @album_bp.route('/', methods=['POST'])
+@jwt_required()
 def create_album():
     dados = request.get_json()
     resultado, status = AlbumService.criar_album(dados)
@@ -31,6 +33,7 @@ def create_album():
     }), status
 
 @album_bp.route('/<int:id>', methods=['PUT'])
+@jwt_required()
 def edit_album(id):
     dados = request.get_json()
     resultado, status = AlbumService.editar_album(id, dados)
@@ -44,6 +47,7 @@ def edit_album(id):
     }), status
 
 @album_bp.route('/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete_album(id):
     resultado, status = AlbumService.deletar_album(id)
     return jsonify({

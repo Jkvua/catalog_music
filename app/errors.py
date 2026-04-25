@@ -1,6 +1,7 @@
 from flask import jsonify
 from werkzeug.exceptions import HTTPException
 from marshmallow import ValidationError
+import traceback
 
 def register_errors(app):
 
@@ -24,6 +25,8 @@ def register_errors(app):
     
     @app.errorhandler(Exception)
     def handle_unexpected_error(e):
+        print("Erro inesperado", e)
+        traceback.print_exc()
         return jsonify({
             "status": "error",
             "message": "Ocorreu um erro inesperado"
