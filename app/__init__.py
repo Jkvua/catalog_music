@@ -1,5 +1,5 @@
 from flask import Flask
-from app.extensions import db, migrate, ma 
+from app.extensions import db, migrate, ma, jwt
 from .errors import register_errors
 from config import DevelopmentConfig, TestingConfig, ProductionConfig
 
@@ -10,6 +10,7 @@ def create_app(config_class=DevelopmentConfig):
     db.init_app(app)
     migrate.init_app(app, db)
     ma.init_app(app)
+    jwt.init_app(app)
 
     with app.app_context():
         from . import models
