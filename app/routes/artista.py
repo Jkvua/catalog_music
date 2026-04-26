@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.extensions import db
+from flask_jwt_extended import jwt_required
 from app.models.artista import Artista
 from app.services.artista import ArtistaService
 from app.schemas.artista import artista_schema, artistas_schema
@@ -7,16 +8,19 @@ from app.schemas.artista import artista_schema, artistas_schema
 artista_bp = Blueprint('artista', __name__, url_prefix='/artistas')
 
 @artista_bp.route('/', methods=['GET'])
+@jwt_required()
 def get_artistas():
     todos_artistas = Artista.query.all()
     return jsonify(artistas_schema.dump(todos_artistas))
 
 @artista_bp.route('/<int:id>', methods=['GET'])
+@jwt_required()
 def get_artista_id(id):
     artista = Artista.query.get_or_404(id)
     return jsonify(artista_schema.dump(artista))
 
 @artista_bp.route('/', methods=['POST'])
+@jwt_required()
 def create_artista():
     dados = request.get_json()
 
@@ -30,6 +34,7 @@ def create_artista():
     }), status
     
 @artista_bp.route('/<int:id>', methods=['PUT'])
+@jwt_required()
 def edit_artista(id):
     data = request.get_json(id)
     
@@ -43,6 +48,7 @@ def edit_artista(id):
     }), status
 
 @artista_bp.route('/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete_artista(id):
     resultado, status = ArtistaService.deletar_artista(id)
 

@@ -9,11 +9,13 @@ from app.schemas.album import album_schema, albums_schema
 album_bp = Blueprint('album', __name__, url_prefix='/albuns')
 
 @album_bp.route('/', methods=['GET'])
+@jwt_required()
 def get_albuns():
     todos_albuns = Album.query.all()
     return jsonify(albums_schema.dump(todos_albuns))
 
 @album_bp.route('/<int:id>', methods=['GET'])
+@jwt_required()
 def get_album_id(id):
     album = Album.query.get_or_404(id)
     return jsonify(album_schema.dump(album))
