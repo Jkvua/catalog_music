@@ -6,7 +6,7 @@ from flask_jwt_extended import get_jwt_identity
 class AlbumService:
     @staticmethod
     def criar_album(dados):
-        usuario_id = dados.get('usuario_id')
+        usuario_id = get_jwt_identity()
         titulo = dados.get('titulo')
         artista_id = dados.get('artista_id')
         ano = dados.get('ano')
@@ -54,7 +54,11 @@ class AlbumService:
     
     @staticmethod
     def editar_album(id, dados):
+        usuario_id = get_jwt_identity()
         album = Album.query.get_or_404(id)
+
+        if album.usuario_id != usuario_id:
+            return {"error": "Você não tem permissão para editar este álbum"}, 403
 
         novo_titulo = dados.get('titulo')
         if novo_titulo and len(novo_titulo.strip()) < 1:

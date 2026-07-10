@@ -3,13 +3,14 @@ from app.models.album import Album
 from app.models.usuario import Usuario
 from app.extensions import db
 from datetime import datetime
+from flask_jwt_extended import get_jwt_identity
 
 class AvaliacaoService:
     @staticmethod
     def criar_avaliacao(dados):
+        usuario_id = get_jwt_identity()
         nota = dados.get('nota')
         comentario = dados.get('comentario')
-        usuario_id = dados.get('usuario_id')
         data_escuta_str = dados.get('data_escuta')
         usuario_email = dados.get('usuario_email')
         album_id = dados.get('album_id')
@@ -59,10 +60,10 @@ class AvaliacaoService:
             return {"error": f"Já existe avaliação para esse álbum"}, 400
         
         nova_avaliacao = Avaliacao(
+            usuario_id=usuario.id,
             nota=nota, 
             comentario=comentario.strip(), 
             data_escuta=data_escuta,
-            usuario_id=usuario.id, 
             album_id=album.id
             
             )
@@ -74,7 +75,11 @@ class AvaliacaoService:
     
     @staticmethod
     def editar_avaliacao(id, dados):
+        usuario_id = get_jwt_identity()
         avaliacao = Avaliacao.query.get_or_404(id)
+
+        if avaliacao.usuario_id != usuario_id:
+            return {"error": "Você não tem permissão para editar esta avaliação"}, 403
 
         nova_nota = dados.get('nota')
         if nova_nota is not None and (nova_nota < 1 or nova_nota > 5):
@@ -103,7 +108,11 @@ class AvaliacaoService:
     
     @staticmethod
     def delete_avaliacao(id):
+        usuario_id = get_jwt_identity()
         avaliacao = Avaliacao.query.get_or_404(id)
+
+        if avaliacao.usuario_id != usuario_id:
+            return {"error": "Você não tem permissão para deletar esta avaliação"}, 403
     
         db.session.delete(avaliacao)
         db.session.commit()

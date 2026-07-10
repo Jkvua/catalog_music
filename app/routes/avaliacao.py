@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.extensions import db
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.avaliacao import Avaliacao
 from app.services.avaliacoes import AvaliacaoService
 from app.schemas.avaliacao import avaliacao_schema, avaliacoes_schema
@@ -10,13 +10,19 @@ avaliacao_bp = Blueprint('avaliacao', __name__, url_prefix='/avaliacoes')
 @avaliacao_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_avaliacoes():
-    todas_avaliacao = Avaliacao.query.all()
+    usuario_id = get_jwt_identity()
+    todas_avaliacao = Avaliacao.query.filter_by(usuario_id=usuario_id).all()
     return jsonify(avaliacoes_schema.dump(todas_avaliacao))
 
 @avaliacao_bp.route('/<int:id>', methods=['GET'])
 @jwt_required()
 def get_avaliacao(id):
+    usuario_id = get_jwt_identity()
     avaliacao_id = Avaliacao.query.get_or_404(id)
+
+    if avaliacao_id.usuario_id != usuario_id:
+        return jsonify({"error": "Você não tem permissão para acessar avaliações que não cadastrou"}), 403
+    
     return jsonify(avaliacao_schema.dump(avaliacao_id))
 
 @avaliacao_bp.route('/', methods=['POST'])
