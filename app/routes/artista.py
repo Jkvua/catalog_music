@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.extensions import db
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.artista import Artista
 from app.services.artista import ArtistaService
 from app.schemas.artista import artista_schema, artistas_schema
@@ -10,13 +10,19 @@ artista_bp = Blueprint('artista', __name__, url_prefix='/artistas')
 @artista_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_artistas():
-    todos_artistas = Artista.query.all()
+    usuario_id = get_jwt_identity()
+    todos_artistas = Artista.query.filter_by(usuario_id=usuario_id).all()
     return jsonify(artistas_schema.dump(todos_artistas))
 
 @artista_bp.route('/<int:id>', methods=['GET'])
 @jwt_required()
-def get_artista_id(id):
+def get_artista_id(id): 
+    usuario_id = get_jwt_identity()
     artista = Artista.query.get_or_404(id)
+
+    if artista.usuario_id != usuario_id:
+        return jsonify({"error": "Você não tem permissão para acessar artistas que não cadastrou"}), 403
+
     return jsonify(artista_schema.dump(artista))
 
 @artista_bp.route('/', methods=['POST'])

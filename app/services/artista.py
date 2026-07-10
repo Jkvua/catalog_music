@@ -1,10 +1,12 @@
 from app.models.artista import Artista
 from app.models.album import Album
 from app.extensions import db
+from flask_jwt_extended import get_jwt_identity
 
 class ArtistaService:
     @staticmethod
     def criar_artista(dados):
+        usuario_id = get_jwt_identity()
         nome = dados.get('nome')
         genero = dados.get('genero')
         pais = dados.get('pais')
@@ -21,7 +23,8 @@ class ArtistaService:
             return{"error": f"O Artista {nome} já existe no catálogo"}, 400
         
         novo_artista = Artista(
-            nome=nome.strip(), 
+            nome=nome.strip(),
+            usuario_id=usuario_id, 
             genero=genero.strip(),
             pais=pais.strip()
         )
@@ -33,7 +36,11 @@ class ArtistaService:
     
     @staticmethod
     def editar_artista(id, dados):
+        usuario_id = get_jwt_identity()
         artista = Artista.query.get_or_404(id)
+
+        if artista.usuario_id != usuario_id:
+            return {"error": "Você não tem permissão para editar este artista"}, 403
 
         novo_nome = dados.get('nome')
         if novo_nome and len(novo_nome.strip()) < 1:
@@ -59,7 +66,12 @@ class ArtistaService:
     
     @staticmethod
     def deletar_artista(id):
+        usuario_id = get_jwt_identity()
         artista = Artista.query.get_or_404(id)
+
+        if artista.usuario_id != usuario_id:
+            return {"error": "Você não tem permissão para deletar este artista"}, 403
+
         db.session.delete(artista)
         db.session.commit()
 
