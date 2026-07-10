@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.extensions import db
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.album import Album
 from app.services.album import AlbumService
 from app.schemas.album import album_schema, albums_schema
@@ -11,13 +11,19 @@ album_bp = Blueprint('album', __name__, url_prefix='/albuns')
 @album_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_albuns():
-    todos_albuns = Album.query.all()
+    usuario_id = get_jwt_identity()
+    todos_albuns = Album.query.filter_by(usuario_id=usuario_id).all()
     return jsonify(albums_schema.dump(todos_albuns))
 
 @album_bp.route('/<int:id>', methods=['GET'])
 @jwt_required()
 def get_album_id(id):
+    usuario_id = get_jwt_identity()
     album = Album.query.get_or_404(id)
+
+    if album.usuario_id != usuario_id:
+        return jsonify({"error": "Você não tem permissão para acessar álbuns que não cadastrou"}), 403
+    
     return jsonify(album_schema.dump(album))
 
 @album_bp.route('/', methods=['POST'])
