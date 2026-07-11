@@ -7,7 +7,7 @@ class UsuarioSchema(ma.SQLAlchemyAutoSchema):
         model = Usuario
         sqla_session = db.session
         load_instance = True
-        load_only = ("password",)
+        fields = ("id", "user", "email", "avaliacoes")
 
     user = fields.String(required=True, validate=validate.Length(min=1, max=100))
     email = fields.Email(required=True, validate=validate.Length(max=100))

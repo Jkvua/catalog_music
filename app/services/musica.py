@@ -2,10 +2,12 @@ from app.models.musica import Musica
 from app.models.album import Album
 from app.models.artista import Artista
 from app.extensions import db
+from flask_jwt_extended import get_jwt_identity
 
 class MusicaService:
     @staticmethod
     def criar_musica(dados):
+        usuario_id = get_jwt_identity()
         titulo = dados.get('titulo')
         duracao = dados.get('duracao')
         album_id = dados.get('album_id')
@@ -58,6 +60,7 @@ class MusicaService:
             return {"error": f"A música {titulo} ja existe para esse artista ou já existe nesse album"}
 
         nova_musica = Musica(
+            usuario_id=usuario_id,
             titulo=titulo.strip(),
             duracao=duracao,
             album_id=album.id,
@@ -71,7 +74,11 @@ class MusicaService:
     
     @staticmethod
     def editar_musica(id, dados):
+        usuario_id = get_jwt_identity()
         musica = Musica.query.get_or_404(id)
+
+        if musica.usuario_id != usuario_id:
+            return {"error": "Você não tem permissão para editar esta música"}, 403
 
         novo_titulo = dados.get('titulo')
         if novo_titulo and len(novo_titulo.strip()) < 1:
@@ -107,7 +114,13 @@ class MusicaService:
 
     @staticmethod
     def deletar_musica(id):
+        usuario_id = get_jwt_identity()
         musica = Musica.query.get_or_404(id)
+
+        if musica.usuario_id != usuario_id:
+            return {"error": "Você não tem permissão para deletar esta música"}, 403
+
         db.session.delete(musica)
         db.session.commit()
+        
         return {"message": f"Música {musica.titulo} foi deletada com sucesso"}, 200

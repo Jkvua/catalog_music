@@ -6,6 +6,10 @@ import re
 class UsuarioService:
     @staticmethod
 
+    def is_admin(usuario_id):
+        usuario = Usuario.query.get(usuario_id)
+        return usuario.is_admin if usuario else False
+
     def validar_email(email):
         regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
         return re.search(regex, email)

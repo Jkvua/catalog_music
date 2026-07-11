@@ -8,6 +8,7 @@ class Musica(db.Model):
     duracao = db.Column(db.String(20), nullable=False)
     #faixa = db.Column(db.Integer)
 
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=True)
     album_id = db.Column(db.Integer, db.ForeignKey("albuns.id"))
     album = db.relationship("Album", back_populates="musicas")
 

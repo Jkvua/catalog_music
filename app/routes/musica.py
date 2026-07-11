@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.extensions import db
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.musica import Musica
 from app.services.musica import MusicaService
 from app.schemas.musica import musica_schema, musicas_schema, musica_output_schema, musicas_output_schema
@@ -10,13 +10,19 @@ musica_bp = Blueprint('musica', __name__, url_prefix='/musicas')
 @musica_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_musicas():
-    todas_musica = Musica.query.all()
+    usuario_id = get_jwt_identity()
+    todas_musica = Musica.query.filter_by(usuario_id=usuario_id).all()
     return jsonify(musicas_output_schema.dump(todas_musica))
 
 @musica_bp.route('/<int:id>', methods=['GET'])
 @jwt_required()
 def get_musica(id):
+    usuario_id = get_jwt_identity()
     musica = Musica.query.get_or_404(id)
+
+    if musica.usuario_id != usuario_id:
+        return jsonify({"error": "Você não tem permissão para acessar músicas que não cadastrou"}), 403
+
     return jsonify(musica_output_schema.dump(musica))
 
 @musica_bp.route('/', methods=['POST'])
