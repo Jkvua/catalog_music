@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from app.extensions import db, migrate, ma, jwt
 from .errors import register_errors
 from config import DevelopmentConfig, TestingConfig, ProductionConfig
@@ -11,6 +12,8 @@ def create_app(config_class=DevelopmentConfig):
     migrate.init_app(app, db)
     ma.init_app(app)
     jwt.init_app(app)
+
+    CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
     with app.app_context():
         from . import models
