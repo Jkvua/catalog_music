@@ -28,23 +28,31 @@ def get_artista_id(id):
 @artista_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_artista():
+    usuario_id = get_jwt_identity()
     dados = request.get_json()
+    dados['usuario_id'] = usuario_id
 
     resultado, status = ArtistaService.criar_artista(dados)
     if status == 400:
         return jsonify(resultado), 400
     
     return jsonify({
-        "musica": artista_schema.dump(resultado),
+        "artista": artista_schema.dump(resultado),
         "message": "O artista foi criado com sucesso"
     }), status
     
 @artista_bp.route('/<int:id>', methods=['PUT'])
 @jwt_required()
 def edit_artista(id):
-    data = request.get_json(id)
+    usuario_id = get_jwt_identity()
+    artista = Artista.query.get_or_404(id)
+
+    if artista.usuario_id != usuario_id:
+        return jsonify({"error": "Você não tem permissão para editar artistas que não cadastrou"}), 403
+
+    data = request.get_json()
     
-    resultado, status = ArtistaService.criar_artista(id, data)
+    resultado, status = ArtistaService.editar_artista(id, data)
     if status == 400:
         return jsonify(resultado), 400
 

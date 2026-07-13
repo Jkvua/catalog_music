@@ -28,7 +28,9 @@ def get_musica(id):
 @musica_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_musica():
+    usuario_id = get_jwt_identity()
     dados = request.get_json()
+    dados['usuario_id'] = usuario_id
     
     resultado, status = MusicaService.criar_musica(dados)
     if status == 201:
@@ -42,6 +44,12 @@ def create_musica():
 @musica_bp.route('/<int:id>', methods=['PUT'])
 @jwt_required()
 def edit_musica(id):
+    usuario_id = get_jwt_identity()
+    musica = Musica.query.get_or_404(id)
+
+    if musica.usuario_id != usuario_id:
+        return jsonify({"error": "Você não tem permissão para editar músicas que não cadastrou"}), 403
+
     data = request.get_json()
     
     resultado, status = MusicaService.editar_musica(id, data)

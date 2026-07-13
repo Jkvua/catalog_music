@@ -29,7 +29,10 @@ def get_album_id(id):
 @album_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_album():
+    usuario_id = get_jwt_identity()
     dados = request.get_json()
+    dados['usuario_id'] = usuario_id
+
     resultado, status = AlbumService.criar_album(dados)
     
     if status != 400:
@@ -43,6 +46,12 @@ def create_album():
 @album_bp.route('/<int:id>', methods=['PUT'])
 @jwt_required()
 def edit_album(id):
+    usuario_id = get_jwt_identity()
+    album = Album.query.get_or_404(id)
+
+    if album.usuario_id != usuario_id:
+        return jsonify({"error": "Você não tem permissão para editar álbuns que não cadastrou"}), 403
+
     dados = request.get_json()
     resultado, status = AlbumService.editar_album(id, dados)
     
