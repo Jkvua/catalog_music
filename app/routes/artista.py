@@ -10,14 +10,14 @@ artista_bp = Blueprint('artista', __name__, url_prefix='/artistas')
 @artista_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_artistas():
-    usuario_id = get_jwt_identity()
+    usuario_id = int(get_jwt_identity())
     todos_artistas = Artista.query.filter_by(usuario_id=usuario_id).all()
     return jsonify(artistas_schema.dump(todos_artistas))
 
 @artista_bp.route('/<int:id>', methods=['GET'])
 @jwt_required()
 def get_artista_id(id): 
-    usuario_id = get_jwt_identity()
+    usuario_id = int(get_jwt_identity())
     artista = Artista.query.get_or_404(id)
 
     if artista.usuario_id != usuario_id:
@@ -28,7 +28,7 @@ def get_artista_id(id):
 @artista_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_artista():
-    usuario_id = get_jwt_identity()
+    usuario_id = int(get_jwt_identity())
     dados = request.get_json()
     dados['usuario_id'] = usuario_id
 
@@ -44,7 +44,7 @@ def create_artista():
 @artista_bp.route('/<int:id>', methods=['PUT'])
 @jwt_required()
 def edit_artista(id):
-    usuario_id = get_jwt_identity()
+    usuario_id = int(get_jwt_identity())
     artista = Artista.query.get_or_404(id)
 
     if artista.usuario_id != usuario_id:

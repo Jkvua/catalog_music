@@ -13,8 +13,10 @@ class AlbumSchema(ma.SQLAlchemyAutoSchema):
     titulo = fields.String(required=True, validate=validate.Length(min=1, max=200))
     ano_lancamento = fields.Integer(required=True, validate=validate.Range(min=1900, max=2100))
     
-    musicas = fields.Nested('MusicaInputSchema', many=True)
+    artista = fields.Nested('ArtistaSchema', only=['id', 'nome'])
+    musicas = fields.Nested('MusicaOutputSchema', many=True)
     avaliacao = fields.Nested('AvaliacaoSchema', many=True, exclude=('album_id',))
+    usuario_id = fields.Integer()  #-- para mostrar o id do usuário que criou o álbum
 
 album_schema = AlbumSchema()
 albums_schema = AlbumSchema(many=True)  

@@ -37,6 +37,7 @@ class MusicaOutputSchema(MusicaInputSchema):
     
     album = fields.Nested(AlbumSchema, only=('id', 'titulo')) #-- para mostrar título do álbum
     artista = fields.Nested(ArtistaSchema, only=('id', 'nome')) #-- para mostrar nome do artista
+    usuario_id = fields.Integer() #-- para mostrar o id do usuário que criou a música
 
 musica_output_schema = MusicaOutputSchema()
 musicas_output_schema = MusicaOutputSchema(many=True)

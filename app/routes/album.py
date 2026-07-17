@@ -11,17 +11,17 @@ album_bp = Blueprint('album', __name__, url_prefix='/albuns')
 @album_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_albuns():
-    usuario_id = get_jwt_identity()
+    usuario_id = int(get_jwt_identity())
     todos_albuns = Album.query.filter_by(usuario_id=usuario_id).all()
     return jsonify(albums_schema.dump(todos_albuns))
 
 @album_bp.route('/<int:id>', methods=['GET'])
 @jwt_required()
 def get_album_id(id):
-    usuario_id = get_jwt_identity()
+    usuario_id = int(get_jwt_identity())
     album = Album.query.get_or_404(id)
 
-    if album.usuario_id != usuario_id:
+    if int(album.usuario_id) != usuario_id:
         return jsonify({"error": "Você não tem permissão para acessar álbuns que não cadastrou"}), 403
     
     return jsonify(album_schema.dump(album))
@@ -29,13 +29,13 @@ def get_album_id(id):
 @album_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_album():
-    usuario_id = get_jwt_identity()
+    usuario_id = int(get_jwt_identity())
     dados = request.get_json()
     dados['usuario_id'] = usuario_id
 
     resultado, status = AlbumService.criar_album(dados)
     
-    if status != 400:
+    if status != 201:
         return jsonify(resultado), status
     
     return jsonify({
@@ -46,16 +46,16 @@ def create_album():
 @album_bp.route('/<int:id>', methods=['PUT'])
 @jwt_required()
 def edit_album(id):
-    usuario_id = get_jwt_identity()
+    usuario_id = int(get_jwt_identity())
     album = Album.query.get_or_404(id)
 
-    if album.usuario_id != usuario_id:
+    if int(album.usuario_id) != usuario_id:
         return jsonify({"error": "Você não tem permissão para editar álbuns que não cadastrou"}), 403
 
     dados = request.get_json()
     resultado, status = AlbumService.editar_album(id, dados)
     
-    if status != 400:
+    if status != 200:
         return jsonify(resultado), status
     
     return jsonify({

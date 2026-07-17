@@ -10,11 +10,13 @@ class AvaliacaoSchema(ma.SQLAlchemyAutoSchema):
         sqla_session = db.session
         include_fk = True
      
+    id = fields.Integer() 
     nota = fields.Integer(required=True, validate=validate.Range(min=1, max=5))
     comentario = fields.String(validate=validate.Length(max=500))
+    data_escuta = fields.Date()
     
     usuario = fields.Nested("UsuarioSchema", only=('id', 'user', 'email'))
-    album = fields.Nested(AlbumSchema, only=['titulo'])
+    album = fields.Nested(AlbumSchema, only=['id', 'titulo', 'musicas', 'artista', 'ano_lancamento'])
 
-avaliacao_schema = AvaliacaoSchema()
+avaliacao_schema = AvaliacaoSchema()    
 avaliacoes_schema = AvaliacaoSchema(many=True)

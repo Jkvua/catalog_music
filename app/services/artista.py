@@ -6,7 +6,7 @@ from flask_jwt_extended import get_jwt_identity
 class ArtistaService:
     @staticmethod
     def criar_artista(dados):
-        usuario_id = get_jwt_identity()
+        usuario_id = int(get_jwt_identity())
         nome = dados.get('nome')
         genero = dados.get('genero')
         pais = dados.get('pais')
@@ -36,7 +36,7 @@ class ArtistaService:
     
     @staticmethod
     def editar_artista(id, dados):
-        usuario_id = get_jwt_identity()
+        usuario_id = int(get_jwt_identity())
         artista = Artista.query.get_or_404(id)
 
         if artista.usuario_id != usuario_id:
@@ -66,7 +66,7 @@ class ArtistaService:
     
     @staticmethod
     def deletar_artista(id):
-        usuario_id = get_jwt_identity()
+        usuario_id = int(get_jwt_identity())
         artista = Artista.query.get_or_404(id)
 
         if artista.usuario_id != usuario_id:

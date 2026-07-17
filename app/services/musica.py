@@ -7,7 +7,7 @@ from flask_jwt_extended import get_jwt_identity
 class MusicaService:
     @staticmethod
     def criar_musica(dados):
-        usuario_id = get_jwt_identity()
+        usuario_id = int(get_jwt_identity())
         titulo = dados.get('titulo')
         duracao = dados.get('duracao')
         album_id = dados.get('album_id')
@@ -36,19 +36,19 @@ class MusicaService:
             album = Album.query.get(album_id)   
             if not album:
                 return {"error": f"Álbum com ID {album_id} não encontrado"}, 404
-        if album_nome:
+        elif album_nome:
             album = Album.query.filter_by(titulo=album_nome.strip()).first()
             if not album:
                 return {"error": f"Album {album_nome} não encontrado"}, 404
         else:
-            return {"error": f"É necessário informar o nome do album ou o ID do album"}
+            return {"error": f"É necessário informar o nome do album ou o ID do album"}, 400
 
         artista = None
         if artista_id:
             artista = Artista.query.get(artista_id)
             if not artista:
                 return {"error": f"Artista com ID {artista_id} não encontrado"}, 404
-        if artista_nome:
+        elif artista_nome:
             artista = Artista.query.filter_by(nome=artista_nome.strip()).first()
             if not artista:
                 return {"error": f"Artista {artista_nome} não encontrado"}, 404
@@ -57,7 +57,7 @@ class MusicaService:
 
         existente = Musica.query.filter_by(titulo=titulo.strip(), artista_id=artista.id, album_id=album.id).first()
         if existente:
-            return {"error": f"A música {titulo} ja existe para esse artista ou já existe nesse album"}
+            return {"error": f"A música {titulo} ja existe para esse artista ou já existe nesse album"}, 400
 
         nova_musica = Musica(
             usuario_id=usuario_id,
@@ -69,13 +69,20 @@ class MusicaService:
 
         db.session.add(nova_musica)
         db.session.commit()
+        db.session.refresh(nova_musica)
 
         return nova_musica, 201
     
     @staticmethod
     def editar_musica(id, dados):
-        usuario_id = get_jwt_identity()
+        usuario_id = int(get_jwt_identity())
         musica = Musica.query.get_or_404(id)
+
+        print("========== EDITAR MÚSICA ==========")
+        print("Usuário logado:", usuario_id)
+        print("Usuário da música:", musica.usuario_id)
+        print("ID da música:", musica.id)
+        print("Título:", musica.titulo)
 
         if musica.usuario_id != usuario_id:
             return {"error": "Você não tem permissão para editar esta música"}, 403
@@ -114,7 +121,7 @@ class MusicaService:
 
     @staticmethod
     def deletar_musica(id):
-        usuario_id = get_jwt_identity()
+        usuario_id = int(get_jwt_identity())
         musica = Musica.query.get_or_404(id)
 
         if musica.usuario_id != usuario_id:

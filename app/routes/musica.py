@@ -3,21 +3,21 @@ from app.extensions import db
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.musica import Musica
 from app.services.musica import MusicaService
-from app.schemas.musica import musica_schema, musicas_schema, musica_output_schema, musicas_output_schema
+from app.schemas.musica import musica_output_schema, musicas_output_schema
 
 musica_bp = Blueprint('musica', __name__, url_prefix='/musicas')
 
 @musica_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_musicas():
-    usuario_id = get_jwt_identity()
+    usuario_id = int(get_jwt_identity())
     todas_musica = Musica.query.filter_by(usuario_id=usuario_id).all()
     return jsonify(musicas_output_schema.dump(todas_musica))
 
 @musica_bp.route('/<int:id>', methods=['GET'])
 @jwt_required()
 def get_musica(id):
-    usuario_id = get_jwt_identity()
+    usuario_id = int(get_jwt_identity())
     musica = Musica.query.get_or_404(id)
 
     if musica.usuario_id != usuario_id:
@@ -28,23 +28,23 @@ def get_musica(id):
 @musica_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_musica():
-    usuario_id = get_jwt_identity()
+    usuario_id = int(get_jwt_identity())
     dados = request.get_json()
     dados['usuario_id'] = usuario_id
     
     resultado, status = MusicaService.criar_musica(dados)
-    if status == 201:
-        return jsonify(resultado), 201
+    if status != 201:
+        return jsonify(resultado), status
     
     return jsonify({
-        "musica": musica_schema.dump(resultado),
+        "musica": musica_output_schema.dump(resultado),
         "message": "A música foi criada com sucesso"
     }), status
 
 @musica_bp.route('/<int:id>', methods=['PUT'])
 @jwt_required()
 def edit_musica(id):
-    usuario_id = get_jwt_identity()
+    usuario_id = int(get_jwt_identity())
     musica = Musica.query.get_or_404(id)
 
     if musica.usuario_id != usuario_id:
@@ -53,11 +53,11 @@ def edit_musica(id):
     data = request.get_json()
     
     resultado, status = MusicaService.editar_musica(id, data)
-    if status == 400:
-        return jsonify(resultado), 400
+    if status != 200:
+        return jsonify(resultado), status
     
     return jsonify({
-        "musica": musica_schema.dump(resultado),
+        "musica": musica_output_schema.dump(resultado),
         "message": "Os dados da música foram atualizados com sucesso"
     }), status
 
