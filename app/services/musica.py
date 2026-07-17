@@ -15,7 +15,6 @@ class MusicaService:
         artista_id = dados.get('artista_id')
         artista_nome = dados.get('artista')
 
-
         if not titulo or len(titulo.strip()) < 1:
             return {"error": "O título da música é obrigatório e deve conter pelo menos 1 caractere"}, 400
         if not duracao:
@@ -77,12 +76,6 @@ class MusicaService:
     def editar_musica(id, dados):
         usuario_id = int(get_jwt_identity())
         musica = Musica.query.get_or_404(id)
-
-        print("========== EDITAR MÚSICA ==========")
-        print("Usuário logado:", usuario_id)
-        print("Usuário da música:", musica.usuario_id)
-        print("ID da música:", musica.id)
-        print("Título:", musica.titulo)
 
         if musica.usuario_id != usuario_id:
             return {"error": "Você não tem permissão para editar esta música"}, 403
