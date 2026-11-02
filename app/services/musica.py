@@ -54,7 +54,7 @@ class MusicaService:
         else:
             return {"error": f"É necessario informar o nome do artista ou o ID do artista"}, 400
 
-        existente = Musica.query.filter_by(titulo=titulo.strip(), artista_id=artista.id, album_id=album.id).first()
+        existente = Musica.query.filter_by(titulo=titulo.strip(), album_id=album.id).first()
         if existente:
             return {"error": f"A música {titulo} ja existe para esse artista ou já existe nesse album"}, 400
 
@@ -63,7 +63,6 @@ class MusicaService:
             titulo=titulo.strip(),
             duracao=duracao,
             album_id=album.id,
-            artista_id=artista.id
         )
 
         db.session.add(nova_musica)
@@ -85,7 +84,7 @@ class MusicaService:
             return {"error": "O título da música deve conter pelo menos 1 caractere"}, 400
         
         if novo_titulo and novo_titulo != musica.titulo:
-            existente = Musica.query.filter_by(titulo=novo_titulo, artista_id=musica.artista_id, album_id=musica.album_id).first()
+            existente = Musica.query.filter_by(titulo=novo_titulo, album_id=musica.album_id).first()
             if existente and existente.id != id:
                 return {"error": f"A Música {novo_titulo} já existe para esse artista neste álbum"}, 400
             musica.titulo = novo_titulo
@@ -105,9 +104,6 @@ class MusicaService:
         
         if 'album_id' in dados:
             return {"error": "Não é permitido alterar o álbum de uma música já existente"}, 400
-
-        if 'artista_id' in dados:
-            return {"error": "Não é permitido alterar o artista de uma música já existente"}, 400
 
         db.session.commit()
         return musica, 200

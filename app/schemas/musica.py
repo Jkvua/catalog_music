@@ -2,7 +2,7 @@ from app.extensions import ma, db
 from app.models.musica import Musica
 from app.schemas.album import AlbumSchema
 from app.schemas.artista import ArtistaSchema
-from marshmallow import fields, validate
+from marshmallow import fields, validate, validates
 
 class MusicaInputSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -14,7 +14,8 @@ class MusicaInputSchema(ma.SQLAlchemyAutoSchema):
     titulo = fields.String(required=True, validate=validate.Length(min=1, max=200))
     duracao = fields.String(required=True, validate=validate.Length(min=1, max=30))
 
-    def validate_duracao(self, value):
+    @validates('duracao')
+    def validate_duracao(self, value, **kwargs):
         try:
             minutos, segundos = value.split(':')
             minutos = int(minutos)

@@ -11,4 +11,4 @@ class Artista(db.Model):
 
     usuario = db.relationship("Usuario", backref="artistas")
     albuns = db.relationship('Album', back_populates='artista', cascade="all, delete-orphan")
-    musicas = db.relationship('Musica', back_populates='artista', cascade="all, delete-orphan")
+    

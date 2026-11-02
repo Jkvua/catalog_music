@@ -2,6 +2,8 @@ from app.extensions import db
 class Avaliacao(db.Model):
     __tablename__ = "avaliacao"
 
+    __table_args__ = (db.UniqueConstraint('usuario_id', 'album_id', name='unique_usuario_album'),)
+
     id = db.Column(db.Integer, primary_key=True)
     nota = db.Column(db.Float, nullable=False)
     comentario = db.Column(db.Text)
