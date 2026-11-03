@@ -47,7 +47,7 @@ jobs:
           JWT_SECRET_KEY: chave_teste_catalog_music
           SECRET_KEY: chave_testeflask_catalog_music
         run: |
-          pytest
+          python -m pytest
 
   build-artifacts:
     name: Validar build do conteiner (CD)
