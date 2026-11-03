@@ -12,6 +12,8 @@ __pycache__/
 
 # Banco de dados local
 *.db
+.pytest_cache
+.coverage
 *.sqlite3
 
 # Migrations (se não quiser na main)

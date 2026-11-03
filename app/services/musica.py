@@ -1,0 +1,122 @@
+from app.models.musica import Musica
+from app.models.album import Album
+from app.models.artista import Artista
+from app.extensions import db
+from flask_jwt_extended import get_jwt_identity
+
+class MusicaService:
+    @staticmethod
+    def criar_musica(dados):
+        usuario_id = int(get_jwt_identity())
+        titulo = dados.get('titulo')
+        duracao = dados.get('duracao')
+        album_id = dados.get('album_id')
+        album_nome = dados.get('album')
+        artista_id = dados.get('artista_id')
+        artista_nome = dados.get('artista')
+
+        if not titulo or len(titulo.strip()) < 1:
+            return {"error": "O título da música é obrigatório e deve conter pelo menos 1 caractere"}, 400
+        if not duracao:
+            return {"error": "A duração da música é obrigatória (formato MM:SS)"}, 400
+
+        try:
+            minutos, segundos = duracao.split(':')
+            minutos = int(minutos)
+            segundos = int(segundos)
+
+            if minutos < 0 or segundos < 0 or segundos >= 60:
+                return {"error": "Formato de duração da música inválido, use MM:SS"}, 400
+        except (ValueError, AttributeError):
+            return {"error": "A duração da música está em um formato inválido, use MM:SS"}, 400
+        
+        album = None
+        if album_id:
+            album = Album.query.get(album_id)   
+            if not album:
+                return {"error": f"Álbum com ID {album_id} não encontrado"}, 404
+        elif album_nome:
+            album = Album.query.filter_by(titulo=album_nome.strip()).first()
+            if not album:
+                return {"error": f"Album {album_nome} não encontrado"}, 404
+        else:
+            return {"error": f"É necessário informar o nome do album ou o ID do album"}, 400
+
+        artista = None
+        if artista_id:
+            artista = Artista.query.get(artista_id)
+            if not artista:
+                return {"error": f"Artista com ID {artista_id} não encontrado"}, 404
+        elif artista_nome:
+            artista = Artista.query.filter_by(nome=artista_nome.strip()).first()
+            if not artista:
+                return {"error": f"Artista {artista_nome} não encontrado"}, 404
+        else:
+            return {"error": f"É necessario informar o nome do artista ou o ID do artista"}, 400
+
+        existente = Musica.query.filter_by(titulo=titulo.strip(), album_id=album.id).first()
+        if existente:
+            return {"error": f"A música {titulo} ja existe para esse artista ou já existe nesse album"}, 400
+
+        nova_musica = Musica(
+            usuario_id=usuario_id,
+            titulo=titulo.strip(),
+            duracao=duracao,
+            album_id=album.id,
+        )
+
+        db.session.add(nova_musica)
+        db.session.commit()
+        db.session.refresh(nova_musica)
+
+        return nova_musica, 201
+    
+    @staticmethod
+    def editar_musica(id, dados):
+        usuario_id = int(get_jwt_identity())
+        musica = Musica.query.get_or_404(id)
+
+        if musica.usuario_id != usuario_id:
+            return {"error": "Você não tem permissão para editar esta música"}, 403
+
+        novo_titulo = dados.get('titulo')
+        if novo_titulo and len(novo_titulo.strip()) < 1:
+            return {"error": "O título da música deve conter pelo menos 1 caractere"}, 400
+        
+        if novo_titulo and novo_titulo != musica.titulo:
+            existente = Musica.query.filter_by(titulo=novo_titulo, album_id=musica.album_id).first()
+            if existente and existente.id != id:
+                return {"error": f"A Música {novo_titulo} já existe para esse artista neste álbum"}, 400
+            musica.titulo = novo_titulo
+        
+        if 'duracao' in dados:
+            nova_duracao = dados['duracao']
+            try:
+                minutos, segundos = nova_duracao.split(':')
+                minutos = int(minutos)
+                segundos = int(segundos)
+
+                if minutos < 0 or segundos < 0 or segundos >= 60:
+                    return {"error": "Formato de duração da música inválido, use MM:SS"}, 400
+                musica.duracao = nova_duracao.strip()
+            except (ValueError, AttributeError):
+                return {"error": "A duração da música está em um formato inválido, use MM:SS"}, 400
+        
+        if 'album_id' in dados:
+            return {"error": "Não é permitido alterar o álbum de uma música já existente"}, 400
+
+        db.session.commit()
+        return musica, 200
+
+    @staticmethod
+    def deletar_musica(id):
+        usuario_id = int(get_jwt_identity())
+        musica = Musica.query.get_or_404(id)
+
+        if musica.usuario_id != usuario_id:
+            return {"error": "Você não tem permissão para deletar esta música"}, 403
+
+        db.session.delete(musica)
+        db.session.commit()
+        
+        return {"message": f"Música {musica.titulo} foi deletada com sucesso"}, 200
