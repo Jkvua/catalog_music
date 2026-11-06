@@ -3,17 +3,18 @@ from app.extensions import db
 from werkzeug.security import generate_password_hash
 import re
 
-class UsuarioService:
+class UsuarioService:  
     @staticmethod
-
     def is_admin(usuario_id):
         usuario = Usuario.query.get(usuario_id)
         return usuario.is_admin if usuario else False
 
+    @staticmethod
     def validar_email(email):
         regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
         return re.search(regex, email)
     
+    @staticmethod
     def criar_usuario(dados):
         user = dados.get('user')
         email = dados.get('email')
@@ -49,13 +50,42 @@ class UsuarioService:
         except Exception as e:
             db.session.rollback()
             return {"error": "Ocorreu um erro ao criar o usuário"}, 500
+
+    @staticmethod
+    def obter_usuario(id, solicitante_id=None):
+        """
+        Retorna os dados de um usuário específico.
+        Só permite acesso se o solicitante for o próprio usuário ou um Admin.
+        """
+        if solicitante_id and id != solicitante_id and not UsuarioService.is_admin(solicitante_id):
+            return {"error": "Acesso negado"}, 403
+
+        usuario = Usuario.query.get(id)
+        if not usuario:
+            return {"error": "Usuário não encontrado"}, 404
+        
+        return usuario, 200
+
+    @staticmethod
+    def obter_todos_usuarios(solicitante_id):
+        """Retorna todos os usuários. Somente Admin tem acesso."""
+        if not UsuarioService.is_admin(solicitante_id):
+            return {"error": "Acesso negado"}, 403
+            
+        usuarios = Usuario.query.all()
+        return usuarios, 200
     
-    def editar_usuario(id, dados):
-        usuario = Usuario.query.get_or_404(id)
+    @staticmethod
+    def editar_usuario(id, dados, solicitante_id):
+        """Edita os dados do usuário. Somente o dono da conta ou Admin podem alterar."""
+        if id != solicitante_id and not UsuarioService.is_admin(solicitante_id):
+            return {"error": "Acesso negado"}, 403
+
+        usuario = Usuario.query.get(id)
         if not usuario:
             return {"error": f"Usuário não encontrado"}, 404
 
-        if "user"  in dados:
+        if "user" in dados:
             usuario.user = dados["user"].strip()
 
         if "email" in dados:
@@ -63,8 +93,10 @@ class UsuarioService:
 
             if not UsuarioService.validar_email(novo_email):
                 return {"error": "O email fornecido é inválido"}, 400
+            
             if Usuario.query.filter(Usuario.email == novo_email, Usuario.id != id).first():
                 return {"error": f"O email {novo_email} já está em uso por outro usuário"}, 400
+            
             usuario.email = novo_email
 
         if "password" in dados:
@@ -74,9 +106,16 @@ class UsuarioService:
         return usuario, 200
     
     @staticmethod
-    def delete_usuario(id):
-        usuario = Usuario.query.get_or_404(id)
+    def deletar_usuario(id, solicitante_id):
+        """Deleta a conta do usuário. Somente o dono da conta ou Admin podem excluir."""
+        if id != solicitante_id and not UsuarioService.is_admin(solicitante_id):
+            return {"error": "Acesso negado"}, 403
+
+        usuario = Usuario.query.get(id)
+        if not usuario:
+            return {"error": "Usuário não encontrado"}, 404
 
         db.session.delete(usuario)
         db.session.commit()
+        
         return {"message": f"Usuário {usuario.user} e todos os seus dados foram excluídos com sucesso"}, 200

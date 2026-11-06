@@ -2,12 +2,10 @@ from app.models.musica import Musica
 from app.models.album import Album
 from app.models.artista import Artista
 from app.extensions import db
-from flask_jwt_extended import get_jwt_identity
 
 class MusicaService:
     @staticmethod
-    def criar_musica(dados):
-        usuario_id = int(get_jwt_identity())
+    def criar_musica(dados, usuario_id):
         titulo = dados.get('titulo')
         duracao = dados.get('duracao')
         album_id = dados.get('album_id')
@@ -72,8 +70,7 @@ class MusicaService:
         return nova_musica, 201
     
     @staticmethod
-    def editar_musica(id, dados):
-        usuario_id = int(get_jwt_identity())
+    def editar_musica(id, dados, usuario_id):
         musica = Musica.query.get_or_404(id)
 
         if musica.usuario_id != usuario_id:
@@ -109,8 +106,7 @@ class MusicaService:
         return musica, 200
 
     @staticmethod
-    def deletar_musica(id):
-        usuario_id = int(get_jwt_identity())
+    def deletar_musica(id, usuario_id):
         musica = Musica.query.get_or_404(id)
 
         if musica.usuario_id != usuario_id:

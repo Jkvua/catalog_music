@@ -102,10 +102,8 @@ def delete_usuarios(id):
     if not UsuarioService.is_admin(get_jwt_identity()):
         return jsonify({"error": "Acesso negado"}), 403
     
-    resposta, status = UsuarioService.deletar_usuario(id)
+    resposta, status = UsuarioService.deletar_usuario(id, solicitante_id=get_jwt_identity())
 
     return jsonify({
        resposta["message"]: "usuario e todos os seus dados foram excluídos com sucesso"
     }), status
-
-    

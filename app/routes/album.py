@@ -31,9 +31,8 @@ def get_album_id(id):
 def create_album():
     usuario_id = int(get_jwt_identity())
     dados = request.get_json()
-    dados['usuario_id'] = usuario_id
 
-    resultado, status = AlbumService.criar_album(dados)
+    resultado, status = AlbumService.criar_album(dados, usuario_id)
     
     if status != 201:
         return jsonify(resultado), status
@@ -47,13 +46,9 @@ def create_album():
 @jwt_required()
 def edit_album(id):
     usuario_id = int(get_jwt_identity())
-    album = Album.query.get_or_404(id)
-
-    if int(album.usuario_id) != usuario_id:
-        return jsonify({"error": "Você não tem permissão para editar álbuns que não cadastrou"}), 403
-
     dados = request.get_json()
-    resultado, status = AlbumService.editar_album(id, dados)
+
+    resultado, status = AlbumService.editar_album(id, dados, usuario_id)
     
     if status != 200:
         return jsonify(resultado), status
@@ -66,8 +61,7 @@ def edit_album(id):
 @album_bp.route('/<int:id>', methods=['DELETE'])
 @jwt_required()
 def delete_album(id):
-    resultado, status = AlbumService.deletar_album(id)
-    return jsonify({
-        "message": f"O álbum '{resultado.titulo}' foi deletado com sucesso"
-    }), status
-    
+    usuario_id = int(get_jwt_identity())
+   
+    resultado, status = AlbumService.deletar_album(id, usuario_id)
+    return jsonify(resultado), status    

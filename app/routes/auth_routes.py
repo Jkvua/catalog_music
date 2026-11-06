@@ -14,5 +14,10 @@ def login():
 
 @auth_bp.route('/register', methods=["POST"])
 def register():
-    data = request.get_json()
-    return AuthService.register(data.get("user"), data.get("email"), data.get("password"))
+    dados = request.get_json()
+    user = dados.get('user')
+    email = dados.get('email')
+    password = dados.get('password')
+
+    resultado, status = AuthService.register(user, email, password)
+    return jsonify(resultado), status

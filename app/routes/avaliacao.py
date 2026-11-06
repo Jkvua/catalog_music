@@ -30,9 +30,9 @@ def get_avaliacao(id):
 def create_avaliacao():
     usuario_id = int(get_jwt_identity())
     data = request.get_json()
-    data['usuario_id'] = usuario_id
     
-    resultado, status = AvaliacaoService.criar_avaliacao(data)
+    resultado, status = AvaliacaoService.criar_avaliacao(data, usuario_id)
+
     if status != 201:
         return jsonify(resultado), status
     
@@ -45,19 +45,14 @@ def create_avaliacao():
 @jwt_required()
 def edit_avaliacao(id):
     usuario_id = int(get_jwt_identity())
-    avaliacao = Avaliacao.query.get_or_404(id)
-
-    if avaliacao.usuario_id != usuario_id:
-        return jsonify({"error": "Você não tem permissão para editar avaliações que não cadastrou"}), 403
-
     data = request.get_json()
     
-    resultado, status = AvaliacaoService.editar_avaliacao(id, data)
+    resultado, status = AvaliacaoService.editar_avaliacao(id, data, usuario_id)
     if status != 200:
         return jsonify(resultado), status
     
     return jsonify({
-        "avaliacao": avaliacao_schema.dump(avaliacao),
+        "avaliacao": avaliacao_schema.dump(resultado),
         "message": "Os dados da avaliação foram atualizados com sucesso"
     }), status
     
@@ -65,17 +60,12 @@ def edit_avaliacao(id):
 @jwt_required()
 def delete_avaliacao(id):
     usuario_id = int(get_jwt_identity())
-    avaliacao = Avaliacao.query.get_or_404(id)
-
-    if avaliacao.usuario_id != usuario_id:
-        return jsonify({"error": "Você não tem permissão para deletar avaliações que não cadastrou"}), 403
-
-    resultado, status = AvaliacaoService.delete_avaliacao(id)
+    resultado, status = AvaliacaoService.delete_avaliacao(id, usuario_id)
 
     if status != 200:
         return jsonify(resultado), status
 
     return jsonify({
-        "message": f"A avaliação {resultado['id']} sobre o álbum {resultado['album']}'foi deletada com sucesso"
+        "message": f"A avaliação {resultado['id']} sobre o álbum '{resultado['album']}' foi deletada com sucesso"
     }), status
     

@@ -30,9 +30,8 @@ def get_artista_id(id):
 def create_artista():
     usuario_id = int(get_jwt_identity())
     dados = request.get_json()
-    dados['usuario_id'] = usuario_id
 
-    resultado, status = ArtistaService.criar_artista(dados)
+    resultado, status = ArtistaService.criar_artista(dados, usuario_id)
     if status == 400:
         return jsonify(resultado), 400
     
@@ -45,14 +44,9 @@ def create_artista():
 @jwt_required()
 def edit_artista(id):
     usuario_id = int(get_jwt_identity())
-    artista = Artista.query.get_or_404(id)
-
-    if artista.usuario_id != usuario_id:
-        return jsonify({"error": "Você não tem permissão para editar artistas que não cadastrou"}), 403
-
     data = request.get_json()
     
-    resultado, status = ArtistaService.editar_artista(id, data)
+    resultado, status = ArtistaService.editar_artista(id, data, usuario_id)
     if status == 400:
         return jsonify(resultado), 400
 
@@ -64,11 +58,11 @@ def edit_artista(id):
 @artista_bp.route('/<int:id>', methods=['DELETE'])
 @jwt_required()
 def delete_artista(id):
-    resultado, status = ArtistaService.deletar_artista(id)
+    usuario_id = int(get_jwt_identity())
 
-    return jsonify({
-        "message": f"O artista {resultado.nome} foi deletado com sucesso"
-    }), status
+    resultado, status = ArtistaService.deletar_artista(id, usuario_id)
+
+    return jsonify(resultado), status
 
 
     
