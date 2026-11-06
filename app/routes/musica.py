@@ -30,9 +30,8 @@ def get_musica(id):
 def create_musica():
     usuario_id = int(get_jwt_identity())
     dados = request.get_json()
-    dados['usuario_id'] = usuario_id
     
-    resultado, status = MusicaService.criar_musica(dados)
+    resultado, status = MusicaService.criar_musica(dados,usuario_id)
     if status != 201:
         return jsonify(resultado), status
     
@@ -45,14 +44,9 @@ def create_musica():
 @jwt_required()
 def edit_musica(id):
     usuario_id = int(get_jwt_identity())
-    musica = Musica.query.get_or_404(id)
-
-    if musica.usuario_id != usuario_id:
-        return jsonify({"error": "Você não tem permissão para editar músicas que não cadastrou"}), 403
-
     data = request.get_json()
     
-    resultado, status = MusicaService.editar_musica(id, data)
+    resultado, status = MusicaService.editar_musica(id, data, usuario_id)
     if status != 200:
         return jsonify(resultado), status
     
@@ -64,8 +58,7 @@ def edit_musica(id):
 @musica_bp.route('/<int:id>', methods=['DELETE'])
 @jwt_required()
 def delete_musica(id):
-    resultado, status = MusicaService.deletar_musica(id)
+    usuario_id = int(get_jwt_identity())
+    resultado, status = MusicaService.deletar_musica(id, usuario_id)
 
-    return jsonify({
-        "message": f"A música '{resultado}' foi deletada com sucesso"
-    }), status
+    return jsonify(resultado), status

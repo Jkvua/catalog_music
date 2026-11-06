@@ -7,13 +7,14 @@ from config import TestingConfig
 
 @pytest.fixture
 def app():
-    """criando e configurando a aplicação para testes"""
+    """criando e configurando a aplicação para testes com limpeza de conexoes"""
+
+    temp_engine = create_engine(TestingConfig.SQLALCHEMY_DATABASE_URI)
+    if not database_exists(temp_engine.url):
+        create_database(temp_engine.url)
+    temp_engine.dispose()
 
     app = create_app(TestingConfig)
-
-    engine = create_engine(TestingConfig.SQLALCHEMY_DATABASE_URI)
-    if not database_exists(engine.url):
-        create_database(engine.url)
 
     with app.app_context():
         db.create_all()  # Cria todas as tabelas no banco 'musica_test'
@@ -21,6 +22,7 @@ def app():
 
         db.session.remove()
         db.drop_all()  # Limpa o banco de dados após os testes
+        db.engine.dispose()
 
 @pytest.fixture
 def client(app):

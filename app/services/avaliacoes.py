@@ -7,13 +7,11 @@ from app.services.artista import ArtistaService
 from app.services.musica import MusicaService
 from app.extensions import db
 from datetime import datetime
-from flask_jwt_extended import get_jwt_identity
 
 
 class AvaliacaoService:
     @staticmethod
-    def criar_avaliacao(dados):
-        usuario_id = int(get_jwt_identity())
+    def criar_avaliacao(dados, usuario_id):
         nota = dados.get('nota')
         comentario = dados.get('comentario')
         data_escuta_str = dados.get('data_escuta')
@@ -59,7 +57,7 @@ class AvaliacaoService:
                     "nome": artista_nome,
                     "genero": artista_data.get("genero", "Não informado"),
                     "pais": artista_data.get("pais", "Não informado")
-                })
+                }, usuario_id)
                 if status != 201:
                     return artista, status
 
@@ -68,7 +66,7 @@ class AvaliacaoService:
                 "titulo": album_data.get("titulo"),
                 "ano": album_data.get("ano"),
                 "artista_id": artista.id
-            })
+            }, usuario_id)
             if status != 201:
                 return album, status
 
@@ -76,7 +74,7 @@ class AvaliacaoService:
                 musica["album_id"] = album.id
                 musica["artista_id"] = artista.id
 
-                resultado, status = MusicaService.criar_musica(musica)
+                resultado, status = MusicaService.criar_musica(musica, usuario_id)
 
                 if status != 201:
                     return resultado, status
@@ -111,8 +109,7 @@ class AvaliacaoService:
         return nova_avaliacao, 201
     
     @staticmethod
-    def editar_avaliacao(id, dados):
-        usuario_id = int(get_jwt_identity())
+    def editar_avaliacao(id, dados, usuario_id):
         avaliacao = Avaliacao.query.get_or_404(id)
 
         if avaliacao.usuario_id != usuario_id:
@@ -157,17 +154,17 @@ class AvaliacaoService:
 
                 for musica in album.musicas:
                     if musica.id not in ids_enviados:
-                        MusicaService.deletar_musica(musica.id)
+                        MusicaService.deletar_musica(musica.id, usuario_id)
 
                 for m in musica_data:
                     if m.get("id", 0) > 0:
-                        musica, status = MusicaService.editar_musica(m["id"],m)
+                        musica, status = MusicaService.editar_musica(m["id"],m, usuario_id)
                         if status != 200:
                             return musica, status
                     else:
                         m["album_id"] = album.id
                         m["artista_id"] = album.artista_id
-                        musica, status = MusicaService.criar_musica(m)
+                        musica, status = MusicaService.criar_musica(m, usuario_id)
 
                         if status != 201:
                             return musica, status
@@ -177,8 +174,7 @@ class AvaliacaoService:
         return avaliacao, 200
     
     @staticmethod
-    def delete_avaliacao(id):
-        usuario_id = int(get_jwt_identity())
+    def delete_avaliacao(id, usuario_id):
         avaliacao = Avaliacao.query.get_or_404(id)
 
         if avaliacao.usuario_id != usuario_id:

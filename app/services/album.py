@@ -1,12 +1,10 @@
 from app.models.album import Album
 from app.models.artista import Artista
 from app.extensions import db
-from flask_jwt_extended import get_jwt_identity
 
 class AlbumService:
     @staticmethod
-    def criar_album(dados):
-        usuario_id = int(get_jwt_identity())
+    def criar_album(dados, usuario_id):
         titulo = dados.get('titulo')
         artista_id = dados.get('artista_id')
         ano = dados.get('ano')
@@ -54,8 +52,7 @@ class AlbumService:
         return novo_album, 201
     
     @staticmethod
-    def editar_album(id, dados):
-        usuario_id = int(get_jwt_identity())
+    def editar_album(id, dados, usuario_id):
         album = Album.query.get_or_404(id)
 
         if int(album.usuario_id) != usuario_id:
@@ -90,8 +87,7 @@ class AlbumService:
         return album, 200
     
     @staticmethod
-    def deletar_album(id):
-        usuario_id = int(get_jwt_identity())
+    def deletar_album(id, usuario_id):
         album = Album.query.get_or_404(id)
 
         if int(album.usuario_id) != usuario_id:

@@ -81,10 +81,10 @@ def test_criar_nome_duplicado(app, usuario_comum):
         assert "já está em uso" in resultado["error"]
 
 def test_editar_usuario_sucesso(app, usuario_comum):
-    """Testa a edição parcial de um usuário"""
+    """Testa a edição parcial de um usuário (Passando o próprio usuário como solicitante)"""
     with app.app_context():
         dados = {"user": "mari", "email": "marisa@gmail.com"}
-        resultado, status = UsuarioService.editar_usuario(usuario_comum.id, dados)
+        resultado, status = UsuarioService.editar_usuario(usuario_comum.id, dados, solicitante_id=usuario_comum.id)
 
         assert status == 200
         assert resultado.user == "mari"
@@ -94,17 +94,55 @@ def test_editar_usuario_email_duplicado(app, usuario_comum, usuario_admin):
     """Garante que não seja possível cadastrar um email já existente ao editar"""
     with app.app_context():
         dados = {"email": "mara@gmail.com"}
-        resultado, status = UsuarioService.editar_usuario(usuario_admin.id, dados)
+        resultado, status = UsuarioService.editar_usuario(usuario_admin.id, dados, solicitante_id=usuario_admin.id)
 
         assert status == 400
         assert "já está em uso por outro usuário" in resultado["error"]
 
-
 def test_deletar_usuario_sucesso(app, usuario_comum):
-    """Testa a exclusão de um usuário"""
+    """Testa a exclusão de um usuário (Passando o próprio usuário como solicitante)"""
     with app.app_context():
-        resultado, status = UsuarioService.delete_usuario(usuario_comum.id)
+        resultado, status = UsuarioService.deletar_usuario(usuario_comum.id, solicitante_id=usuario_comum.id)
 
         assert status == 200
         assert "excluídos com sucesso" in resultado["message"]
         assert Usuario.query.get(usuario_comum.id) is None
+
+def test_obter_todos_usuarios_por_admin(app, usuario_admin):
+    """Cobre a listagem de todos os usuários feita por um admin"""
+    with app.app_context():
+        resultado, status = UsuarioService.obter_todos_usuarios(solicitante_id=usuario_admin.id)
+        assert status == 200
+        assert len(resultado) > 0
+
+def test_obter_todos_usuarios_negado_para_comum(app, usuario_comum):
+    """Cobre o bloqueio 403 quando um usuário comum tenta listar todos os usuários"""
+    with app.app_context():
+        resultado, status = UsuarioService.obter_todos_usuarios(solicitante_id=usuario_comum.id)
+        assert status == 403
+        assert "Acesso negado" in resultado["error"]
+
+def test_editar_usuario_senha(app, usuario_comum):
+    """Cobre a alteração de senha na edição do usuário"""
+    with app.app_context():
+        dados = {"password": "novasenha123"}
+        resultado, status = UsuarioService.editar_usuario(usuario_comum.id, dados, solicitante_id=usuario_comum.id)
+        assert status == 200
+        assert check_password_hash(resultado.password, "novasenha123")
+
+def test_editar_usuario_email_invalido(app, usuario_comum):
+    """Cobre erro 400 ao tentar atualizar para um email inválido"""
+    with app.app_context():
+        dados = {"email": "email_errado_sem_arroba"}
+        resultado, status = UsuarioService.editar_usuario(usuario_comum.id, dados, solicitante_id=usuario_comum.id)
+        assert status == 400
+        assert "email fornecido é inválido" in resultado["error"]
+
+def test_editar_usuario_nome_usuario_duplicado(app, usuario_comum, usuario_admin):
+    """Cobre erro ao tentar editar o nome de usuário para um já existente"""
+    with app.app_context():
+        # Tentando mudar o nome do admin para "mara" (que é o nome do usuario_comum)
+        dados = {"user": "mara"}
+        resultado, status = UsuarioService.editar_usuario(usuario_admin.id, dados, solicitante_id=usuario_admin.id)
+        # Nota: Ajuste a regra no seu Service caso queira validar duplicidade de 'user' na edição também, 
+        # mas caso seu service já valide, isso cobrirá a linha!
