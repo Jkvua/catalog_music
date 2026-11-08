@@ -1,4 +1,5 @@
 from app.extensions import db
+from sqlalchemy.orm import backref
 
 class Artista(db.Model):
     __tablename__ = "artistas"
@@ -9,6 +10,6 @@ class Artista(db.Model):
     genero = db.Column(db.String(50))
     pais = db.Column(db.String(50))
 
-    usuario = db.relationship("Usuario", backref="artistas")
+    usuario = db.relationship("Usuario", backref=backref("artistas",passive_deletes=True)
     albuns = db.relationship('Album', back_populates='artista', cascade="all, delete-orphan")
     
