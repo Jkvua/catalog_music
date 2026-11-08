@@ -68,7 +68,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/catalog_music_api:{{ github.sha}}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/catalog_music_api:${{ github.sha}}
 
   e2e-test:
     name: 3. Testes E2E (Container Real)
@@ -98,7 +98,7 @@ jobs:
 
       - name: Orquestrar Ambiente Docker (Baixando Imagem Pronta)
         env:
-          DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/catalog_music_api:{{ github.sha }}
+          DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/catalog_music_api:${{ github.sha }}
         run: |
           docker compose pull
           docker compose up --no-build -d
