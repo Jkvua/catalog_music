@@ -90,6 +90,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Criar arquivo .env para o Container
+        run: |
+          echo "SECRET_KEY=chave_testeflask_catalog_music" > .env
+          echo "JWT_SECRET_KEY=chave_teste_catalog_music" >> .env
+
       - name: Orquestrar Ambiente Docker (Baixando Imagem Pronta)
         env:
           DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/catalog_music_api:latest

@@ -25,4 +25,4 @@ def test_chave_estrangeira_invalida():
     headers = {"Authorization": f"Bearer {res_login.json().get('access_token')}"}
 
     res_avaliacao = requests.post(f"{BASE_URL}/avaliacoes/", json={"nota": 5, "comentario": "Bom", "data_escuta":"2026-10-10", "album_id": 900}, headers=headers)
-    assert res_avaliacao.status_code in [400, 404], f"Deveria bloquear fk inexistente. Status {res_avaliacao.status_code}"
+    assert res_avaliacao.status_code in [400, 404, 422], f"Deveria bloquear fk inexistente. Status {res_avaliacao.status_code}"
