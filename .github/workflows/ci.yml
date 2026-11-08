@@ -68,7 +68,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/catalog_music_api:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/catalog_music_api:{{ github.sha}}
 
   e2e-test:
     name: 3. Testes E2E (Container Real)
@@ -79,7 +79,7 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Configurar Python (para disparar os scripts de teste)
+      - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -90,19 +90,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Injetar variaveis no Container
+      - name: Criando o .evn para o container
         run: |
-          cat <<EOF > docker-compose.override.yml
-          services:
-            web:
-              environment:
-                - SECRET_KEY=chave_testeflask_catalog_music
-                - JWT_SECRET_KEY=chave_teste_catalog_music
-          EOF
+          echo "SECRET_KEY=chave_testeflask_catalog_music" > .env
+          echo "JWT_SECRET_KEY=chave_teste_catalog_music" >> .env
+          echo "DATABASE_URL=postgresql+psycopg2://postgres:123456@db:5432/musica_test" >> .env
 
       - name: Orquestrar Ambiente Docker (Baixando Imagem Pronta)
         env:
-          DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/catalog_music_api:latest
+          DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/catalog_music_api:{{ github.sha }}
         run: |
           docker compose pull
           docker compose up --no-build -d
