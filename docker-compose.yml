@@ -22,9 +22,9 @@ services:
       - "5000:5000"
     environment:
       - FLASK_ENV=development
-      - DATABASE_URL=${DATABASE_URL:-postgresql+psycopg2://postgres:123456@db:5432/musica_dev}
-      - JWT_SECRET_KEY=chave_dev_catalog_music
-      - SECRET_KEY=chave_appflask_catalog_music
+      - DATABASE_URL=postgresql+psycopg2://postgres:123456@db:5432/musica_dev
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-chave_dev_catalog_music}
+      - SECRET_KEY=${SECRET_KEY:-chave_appflask_catalog_music}
     depends_on:
       - db
 
