@@ -16,5 +16,3 @@ __pycache__/
 .coverage
 *.sqlite3
 
-# Migrations (se não quiser na main)
-migrations/
