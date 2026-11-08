@@ -10,6 +10,6 @@ class Artista(db.Model):
     genero = db.Column(db.String(50))
     pais = db.Column(db.String(50))
 
-    usuario = db.relationship("Usuario", backref=backref("artistas",passive_deletes=True)
+    usuario = db.relationship("Usuario", backref=backref("artistas",passive_deletes=True))
     albuns = db.relationship('Album', back_populates='artista', cascade="all, delete-orphan")
     
