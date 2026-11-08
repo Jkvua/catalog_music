@@ -113,6 +113,7 @@ jobs:
       - name: Executar os Testes E2E
         env: 
           API_URL: "http://localhost:5000"
+          TEST_DATABASE_URL: "postgresql+psycopg2://postgres:123456@localhost:5432/musica_test"
         run: |
           python -m pytest tests/e2e -v
 
