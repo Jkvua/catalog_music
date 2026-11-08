@@ -99,6 +99,10 @@ jobs:
       - name: Orquestrar Ambiente Docker (Baixando Imagem Pronta)
         env:
           DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/catalog_music_api:${{ github.sha }}
+          POSTGRES_DB: musica_test
+          DATABASE: postgresql+psycopg2://postgres:123456@db:5432/musica_test
+          JWT_SECRET_KEY: chave_teste_catalog_music
+          SECRET_KEY: chave_testeflask_catalog_musi
         run: |
           docker compose pull
           docker compose up --no-build -d

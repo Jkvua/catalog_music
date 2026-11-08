@@ -8,7 +8,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: "123456"
-      POSTGRES_DB: musica_dev
+      POSTGRES_DB: ${POSTGRES_DB:-musica_dev}
     ports:
       - "5432:5432"
     volumes:
@@ -17,14 +17,12 @@ services:
   web:
     build: .
     image: ${DOCKER_IMAGE:-catalog_music_api:local}
-    env_file:
-      - .env
     container_name: catalog_music_api
     ports:
       - "5000:5000"
     environment:
       - FLASK_ENV=development
-      - DATABASE_URL=postgresql+psycopg2://postgres:123456@db:5432/musica_dev
+      - DATABASE_URL=${DATABASE_URL:-postgresql+psycopg2://postgres:123456@db:5432/musica_dev}
       - JWT_SECRET_KEY=chave_dev_catalog_music
       - SECRET_KEY=chave_appflask_catalog_music
     depends_on:
