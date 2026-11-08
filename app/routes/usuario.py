@@ -105,5 +105,5 @@ def delete_usuarios(id):
     resposta, status = UsuarioService.deletar_usuario(id, solicitante_id=get_jwt_identity())
 
     return jsonify({
-       resposta["message"]: "usuario e todos os seus dados foram excluídos com sucesso"
+       "message": "usuario e todos os seus dados foram excluídos com sucesso"
     }), status

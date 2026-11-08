@@ -16,6 +16,7 @@ services:
 
   web:
     build: .
+    image: ${DOCKER_IMAGE:-catalog_music_api:local}
     container_name: catalog_music_api
     ports:
       - "5000:5000"
