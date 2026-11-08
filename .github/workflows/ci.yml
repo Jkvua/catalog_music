@@ -104,9 +104,15 @@ jobs:
           JWT_SECRET_KEY: chave_teste_catalog_music
           SECRET_KEY: chave_testeflask_catalog_musi
         run: |
-          docker compose pull
+          docker compose pull --ignore-pull-failures
           docker compose up --no-build -d
-          sleep 10
+          
+          echo "Aguardando o banco iniciar completamente"
+          until docker compose exec -T db pg_isready -U postgres; do
+            echo "Banco ainda não está pronto, aguardando 2 segundos"
+            sleep 2
+          done
+          echo "PostgreSQL está pronto para receber as migrações"
           docker compose exec -T web flask db upgrade
         
       - name: Executar os Testes E2E
