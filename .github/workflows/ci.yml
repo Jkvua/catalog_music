@@ -110,6 +110,11 @@ jobs:
           API_URL: "http://localhost:5000"
         run: |
           python -m pytest tests/e2e -v
+
+      - name: Mostrar Logs da API (Investigação de Erro)
+        if: failure()
+        run: |
+          docker compose logs web
       
       - name: Destruir Ambiente
         if: always()
