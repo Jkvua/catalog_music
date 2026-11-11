@@ -14,7 +14,8 @@ def test_isolamento_entre_usuarios():
     token_a = requests.post(f"{BASE_URL}/auth/login", json={"email": email_a, "password": "fatimab1090"}).json().get("access_token")
     headers_a = {"Authorization": f"Bearer {token_a}"}
 
-    res_artista_a = requests.post(f"{BASE_URL}/artistas/", json={"nome": "Tim Bernardes", "genero": "MPB", "pais": "Brasil"}, headers=headers_a)
+    res_artista_a = requests.post(f"{BASE_URL}/artistas/", json={"nome": f"Tim Bernardes {sufixo}", "genero": "MPB", "pais": "Brasil"}, headers=headers_a)
+    assert res_artista_a.status_code == 201, (f"Falha ao criar artista:", f"status={res_artista_a.status_code}," f"resposta={res_artista_a.text}")
     artista_id = res_artista_a.json()["artista"]["id"]
 
     email_b = f"willianbonner{sufixo}@gmail.com"
