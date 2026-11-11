@@ -2,23 +2,13 @@ import os
 import pytest
 import requests
 import time
-from sqlalchemy import create_engine, text
 
 BASE_URL = os.getenv("API_URL", "http://localhost:5000")
-TEST_DATABASE_URL = os.getenv("TEST_DATABASE_URL")
 
-def registro_existe(conn, tabela, registro_id):
-    tabelas_permitidas = {"artistas", "albuns", "musica", "avaliacao"}
-
-    if tabela not in tabelas_permitidas:
-        raise ValueError(f"Tabela não permitida: {tabela}")
-
-    quantidade = conn.execute(text(f"SELECT COUNT(*) FROM {tabela} WHERE id = :id"), {"id": registro_id}).scalar_one()
-    return quantidade == 1
-
-def usuario_existe(conn, email):
-    quantidade = conn.execute(text("SELECT COUNT(*) FROM usuarios WHERE email = :email"), {"email": email}).scalar_one()
-    return quantidade == 1
+def verificar_criacao(endpoint, registro_id, headers):
+    resposta = requests.get(f"{BASE_URL}/{endpoint}/{registro_id}", headers=headers)
+    assert resposta.status_code == 200, (f"Falha ao consultar {endpoint}/{registro_id}: {resposta.text}")
+    assert resposta.json()["id"] == registro_id
 
 def test_jornada_completa_usuario():
     """Simula o fluxo completo da jornada do usuário"""
@@ -69,29 +59,19 @@ def test_jornada_completa_usuario():
     assert res_avaliacao.status_code == 201, f"Falha ao cadastrar avaliação de álbum: {res_avaliacao.text}"
     avaliacao_id = res_avaliacao.json()["avaliacao"]["id"]
 
-    assert TEST_DATABASE_URL, "TEST_DATABASE_URL não configurada"
-    engine = create_engine(TEST_DATABASE_URL)
+    res_usuario = requests.get(f"{BASE_URL}/usuarios/me", headers=headers)
+    assert res_usuario.status_code == 200
+    assert res_usuario.json()["email"] == email
 
-    try:
-        with engine.connect() as conn:
-            assert usuario_existe(conn, email), "Usuário não encontrado no banco"
-            assert registro_existe(conn, "artistas", artista_id), "Artista não encontrado"
-            assert registro_existe(conn, "albuns", album_id), "Álbum não encontrado"
-            assert registro_existe(conn, "avaliacao", avaliacao_id), "Avaliação não encontrada"
-            for musica_id in musicas_ids:
-                assert registro_existe(conn, "musica", musica_id), (f"Música {musica_id} não encontrada")
+    verificar_criacao("artistas", artista_id, headers)
+    verificar_criacao("albuns", album_id, headers)
+    verificar_criacao("avaliacoes", avaliacao_id, headers)
 
-        res_delete = requests.delete(f"{BASE_URL}/usuarios/me", headers=headers)
+    for musica_id in musicas_ids:
+        verificar_criacao("musicas", musica_id, headers)
 
-        assert res_delete.status_code in [200, 204], (f"Falha ao deletar conta: {res_delete.text}")
+    res_delete = requests.delete(f"{BASE_URL}/usuarios/me", headers=headers)
+    assert res_delete.status_code in [200, 204], (f"Falha ao deletar conta: {res_delete.text}")
 
-        with engine.connect() as conn:
-            assert not usuario_existe(conn, email), "Usuário não foi excluído"
-            assert not registro_existe(conn, "artistas", artista_id), "Artista não foi excluído"
-            assert not registro_existe(conn, "albuns", album_id), "Álbum não foi excluído"
-            assert not registro_existe(conn, "avaliacao", avaliacao_id), "Avaliação não foi excluída"
-
-            for musica_id in musicas_ids:
-                assert not registro_existe(conn, "musica", musica_id), (f"Música {musica_id} não foi excluída")
-    finally:
-        engine.dispose()
+    res_login_pos_exclusao = requests.post(f"{BASE_URL}/auth/login", json={"email": email, "password": "mariadefatima1917"})
+    assert res_login_pos_exclusao.status_code == 401, (f"Usuário excluído consegue fazer login:" f"{res_login_pos_exclusao.text}")

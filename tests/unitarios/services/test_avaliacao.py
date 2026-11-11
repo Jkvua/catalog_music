@@ -116,8 +116,6 @@ def test_criar_avaliacao_album_inexistente(app, usuario_padrao):
         assert status == 404
         assert "não encontrado" in resultado["error"]
 
-# --- NOVOS TESTES PARA COBRIR AS LINHAS VERMELHAS (ALTA COBERTURA) ---
-
 def test_criar_avaliacao_erros_validacao(app, usuario_padrao, album_padrao):
     """Cobre comentário vazio, data ausente e formato de data inválido"""
     with app.app_context():
