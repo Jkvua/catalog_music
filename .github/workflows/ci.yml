@@ -104,7 +104,7 @@ jobs:
 
     if: >-
       ${{
-        github.event_nome == 'push' && 
+        github.event_name == 'push' && 
         github.ref == 'refs/heads/main'
       }}
 
@@ -114,7 +114,7 @@ jobs:
         with:
           name: catalog-music-image
 
-      - nome: Carregar imagem Docker
+      - name: Carregar imagem Docker
         run: docker load -i catalog_music_api.tar
 
       - name: Autenticar no Docker Hub
