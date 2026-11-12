@@ -47,6 +47,8 @@ services:
     image: catalog_music_api:local
     pull_policy: never
     working_dir: /app
+    volumes:
+      - ./resultados:/app/resultados 
     environment:
       TEST_DATABASE_URL: postgresql+psycopg2://postgres:123456@db-test:5432/musica_test
       JWT_SECRET_KEY: chave_teste_catalog_music

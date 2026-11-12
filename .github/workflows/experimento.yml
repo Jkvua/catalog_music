@@ -1,0 +1,47 @@
+name: Experimento - Testes Automatizado/Catalog Music
+
+on:
+  workflow_dispatch
+    inputs:
+      versao:
+        description: "Versão experimental"
+        required: true
+        default: "piloto"
+        type: string
+
+    repeticoes:
+      description: "Quantidade de repetições"
+      required: true
+      default: "1"
+      type: string
+
+jobs:
+  experimento:
+    name: Execução dos cenários A, B e C
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - name: Chackout do código
+        uses: actions/checkout@v4
+
+      - name: Construir imagem Docker
+        run: docker build -t catalog_music_api:local .
+      
+      - name: Executar experimento
+        run: |
+          bash scripts/run-experimento.sh \
+            "${{ inputs.repeticoes }}" \
+            "${{ inputs.vesao }}"
+      
+      - name: Extrair métricas
+        if: always()
+        run: python scripts/extrair-metricas.py
+      
+      - name: Salvar relatórios
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultados-${{ inputs.versao }}-${{ github.run_id }}
+          path: resultados/
+          if-no-files-found: warn
