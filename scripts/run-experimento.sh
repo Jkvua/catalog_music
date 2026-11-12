@@ -21,7 +21,7 @@ if ! [[ "$REPETICOES" =~ ^[1-9][0-9]*$ ]]; then
 fi
 
 # Diretório dos resultados
-IDENTIFICADOR="$(date -u +%Y%m%dT%H%M%SZ)-$$"
+IDENTIFICADOR="$(date -u +%Y%m%dt%H%M%Sz)-$$"
 
 RESULTADOS="$PWD/resultados/$VERSAO/$IDENTIFICADOR"
 DIRETORIO_RELATIVO="${RESULTADOS#"$PWD/resultados/"}"
