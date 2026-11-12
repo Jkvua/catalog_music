@@ -4,6 +4,7 @@ set -Eeuo pipefail
 
 # Executa os comandos a partir da raiz do projeto
 cd "$(dirname "$0")/.."
+JUNIT_XML="${JUNIT_XML:-}"
 
 # Remove o ambiente E2E ao finalizar, inclusive em caso de falha
 cleanup() {
@@ -33,8 +34,17 @@ docker compose --profile test up -d --wait --no-build db-e2e web-test
 
 echo "Executando testes E2E..."
 
-# Executa o pytest contra a API Flask
-docker compose --profile test run --rm \
-    --no-deps \
-    -e API_URL=http://web-test:5000 \
-    tests python -m pytest tests/e2e -v --tb=short
+if [ -n "$JUNIT_XML" ]; then
+    docker compose --profile test run --rm \
+        --no-deps \
+        -e API_URL=http://web-test:5000 \
+        tests python -m pytest tests/e2e \
+        -v --tb=short \
+        --junitxml="$JUNIT_XML"
+else
+    docker compose --profile test run --rm \
+        --no-deps \
+        -e API_URL=http://web-test:5000 \
+        tests python -m pytest tests/e2e \
+        -v --tb=short
+fi
