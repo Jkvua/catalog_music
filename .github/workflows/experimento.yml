@@ -1,7 +1,7 @@
 name: Experimento - Testes Automatizado/Catalog Music
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
     inputs:
       versao:
         description: "Versão experimental"
@@ -9,11 +9,11 @@ on:
         default: "piloto"
         type: string
 
-    repeticoes:
-      description: "Quantidade de repetições"
-      required: true
-      default: "1"
-      type: string
+      repeticoes:
+        description: "Quantidade de repetições"
+        required: true
+        default: "1"
+        type: string
 
 jobs:
   experimento:
@@ -32,7 +32,7 @@ jobs:
         run: |
           bash scripts/run-experimento.sh \
             "${{ inputs.repeticoes }}" \
-            "${{ inputs.vesao }}"
+            "${{ inputs.versao }}"
       
       - name: Extrair métricas
         if: always()
