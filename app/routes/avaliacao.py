@@ -18,12 +18,12 @@ def get_avaliacoes():
 @jwt_required()
 def get_avaliacao(id):
     usuario_id = int(get_jwt_identity())
-    avaliacao_id = Avaliacao.query.get_or_404(id)
+    avaliacao = db.get_or_404(Avaliacao, id)
 
-    if avaliacao_id.usuario_id != usuario_id:
+    if avaliacao.usuario_id != usuario_id:
         return jsonify({"error": "Você não tem permissão para acessar avaliações que não cadastrou"}), 403
     
-    return jsonify(avaliacao_schema.dump(avaliacao_id))
+    return jsonify(avaliacao_schema.dump(avaliacao))
 
 @avaliacao_bp.route('/', methods=['POST'])
 @jwt_required()

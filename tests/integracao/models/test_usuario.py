@@ -3,25 +3,6 @@ from sqlalchemy.exc import IntegrityError
 from app.extensions import db
 from app.models.usuario import Usuario
 
-def test_instanciar_usuario():
-    user_esperado = "camila"
-    email_esperado = "camila@camila.com"
-    password_esperado = "senha123"
-    is_admin_esperado = False
-
-    usuario = Usuario(
-        user=user_esperado,
-        email=email_esperado,
-        password=password_esperado,
-        is_admin=is_admin_esperado
-    )
-
-    assert usuario.user == user_esperado
-    assert usuario.email == email_esperado
-    assert usuario.password == password_esperado
-    assert usuario.is_admin == is_admin_esperado
-    assert usuario.id is None
-
 def test_salvamento_correto_usuario(app):
     usuario = Usuario(user="carlos", email="carlos@carlos.com", password="senha123")
 

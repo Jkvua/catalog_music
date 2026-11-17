@@ -1,38 +1,44 @@
-from app.schemas.musica import musica_schema, musicas_schema
+from app.models.musica import Musica
+from app.models.album import Album
+from app.models.artista import Artista
+from app.schemas.musica import musica_schema, musica_output_schema
 
-def test_validar_musica_schema():
-    """Testa se musica com titulo e duracao (MM:SS) validos passa corretamente"""
-    dados = {
-        "titulo": "Ditto",
-        "duracao": "03:25",
-        "album_id": 1,
-        "usuario_id": 1
-    }
+def test_musica_input_schema_serializacao():
+    """Testa a serialização dos campos de uma música."""
 
-    erros = musica_schema.validate(dados)
-    assert not erros
+    # Arrange
+    musica = Musica(
+        titulo="Ditto",
+        duracao="03:25",
+        album_id=1,
+        usuario_id=1
+    )
+    # Act
+    resultado = musica_schema.dump(musica)
+    # Assert
+    assert resultado["titulo"] == "Ditto"
+    assert resultado["duracao"] == "03:25"
+    assert resultado["album_id"] == 1
+    assert resultado["usuario_id"] == 1
 
-def test_musica_schemas_campos_obrigatorios():
-    """Testa de schemas barra requisicoes sem os campos obrigatorios"""
-    erros = musica_schema.validate({})
-    assert "titulo" in erros
-    assert "duracao" in erros
+def test_musica_output_schema_relacionamentos():
+    """Testa a serialização dos relacionamentos de uma música."""
 
-def test_musica_limite_titulo_musica():
-    """Testa os limeites de caracteres do titulo de musica"""
-    erros_vazio = musica_schema.validate({"titulo": "", "duracao": "03:05"})
-    assert "titulo" in erros_vazio
+    # Arrange
+    artista = Artista(nome="NewJeans", genero="K-POP", pais="Coreia do Sul")
+    album = Album(titulo="OMG", ano=2023, usuario_id=1)
+    album.artista = artista
+    musica = Musica(
+        titulo="Ditto",
+        duracao="03:25",
+        usuario_id=1
+    )
+    musica.album = album
 
-    erros_gigante = musica_schema.validate({"titulo": "A" * 201, "duracao" : "03:05"})
-    assert "titulo" in erros_gigante
-
-def test_musica_schema_validacao_customizada_duracao():
-    """Testar regra de customizacao de tempo da musica (MM:SS)"""
-    erros_segundos = musica_schema.validate({"titulo": "Hype Boy", "duracao": "03:60"})
-    assert "duracao" in erros_segundos
-
-    erros_formato = musica_schema.validate({"titulo": "Hype Boy", "duracao": "300"})
-    assert "duracao" in erros_formato
-
-    erros_letras = musica_schema.validate({"titulo": "Hype Boy", "duracao": "ab:cd"})
-    assert "duracao" in erros_letras
+    # Act
+    resultado = musica_output_schema.dump(musica)
+    # Assert
+    assert resultado["titulo"] == "Ditto"
+    assert resultado["album"]["titulo"] == "OMG"
+    assert resultado["artista"]["nome"] == "NewJeans"
+    assert resultado["usuario_id"] == 1

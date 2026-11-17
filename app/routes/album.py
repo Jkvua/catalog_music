@@ -19,9 +19,9 @@ def get_albuns():
 @jwt_required()
 def get_album_id(id):
     usuario_id = int(get_jwt_identity())
-    album = Album.query.get_or_404(id)
+    album = db.get_or_404(Album, id)
 
-    if int(album.usuario_id) != usuario_id:
+    if album.usuario_id != usuario_id:
         return jsonify({"error": "Você não tem permissão para acessar álbuns que não cadastrou"}), 403
     
     return jsonify(album_schema.dump(album))
@@ -30,7 +30,7 @@ def get_album_id(id):
 @jwt_required()
 def create_album():
     usuario_id = int(get_jwt_identity())
-    dados = request.get_json()
+    dados = request.get_json(silent=True)
 
     resultado, status = AlbumService.criar_album(dados, usuario_id)
     
@@ -46,7 +46,7 @@ def create_album():
 @jwt_required()
 def edit_album(id):
     usuario_id = int(get_jwt_identity())
-    dados = request.get_json()
+    dados = request.get_json(silent=True)
 
     resultado, status = AlbumService.editar_album(id, dados, usuario_id)
     

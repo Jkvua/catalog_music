@@ -5,7 +5,8 @@ class Avaliacao(db.Model):
     __table_args__ = (db.UniqueConstraint('usuario_id', 'album_id', name='unique_usuario_album'),)
 
     id = db.Column(db.Integer, primary_key=True)
-    nota = db.Column(db.Float, nullable=False)
+
+    nota = db.Column(db.Integer, nullable=False)
     comentario = db.Column(db.Text)
     data_escuta = db.Column(db.Date)
 
@@ -14,4 +15,3 @@ class Avaliacao(db.Model):
 
     usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
     usuario = db.relationship("Usuario", back_populates="avaliacoes")
-    

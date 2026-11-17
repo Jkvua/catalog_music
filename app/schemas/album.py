@@ -1,7 +1,7 @@
-from app.extensions import ma
+from app.extensions import ma, db
 from app.models.album import Album
-from marshmallow import fields, validate
-from app.extensions import db
+from marshmallow import fields
+
 
 class AlbumSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -10,13 +10,14 @@ class AlbumSchema(ma.SQLAlchemyAutoSchema):
         include_fk = False
         sqla_session = db.session
 
-    titulo = fields.String(required=True, validate=validate.Length(min=1, max=200))
-    ano_lancamento = fields.Integer(required=True, validate=validate.Range(min=1900, max=2100))
-    
-    artista = fields.Nested('ArtistaSchema', only=['id', 'nome'])
+    titulo = fields.String()
+    ano = fields.Integer(allow_none=True)
+    artista = fields.Nested('ArtistaSchema', only=('id', 'nome'))
     musicas = fields.Nested('MusicaOutputSchema', many=True)
-    avaliacao = fields.Nested('AvaliacaoSchema', many=True, exclude=('album_id',))
-    usuario_id = fields.Integer()  #-- para mostrar o id do usuário que criou o álbum
+    avaliacoes = fields.Nested('AvaliacaoSchema', many=True, only=('id', 'nota', 'comentario', 'data_escuta'))
+
+    usuario_id = fields.Integer()
+
 
 album_schema = AlbumSchema()
-albums_schema = AlbumSchema(many=True)  
+albums_schema = AlbumSchema(many=True)
