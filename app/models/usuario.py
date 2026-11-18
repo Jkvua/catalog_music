@@ -9,4 +9,26 @@ class Usuario(db.Model):
     password = db.Column(db.String(200), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
 
-    avaliacoes = db.relationship("Avaliacao", back_populates="usuario",cascade="all, delete-orphan")
+    artistas = db.relationship(
+        "Artista",
+        back_populates="usuario",
+        passive_deletes=True
+    )
+
+    avaliacoes = db.relationship(
+        "Avaliacao",
+        back_populates="usuario",
+        cascade="all, delete-orphan"
+    )
+
+    albuns = db.relationship(
+        "Album",
+        back_populates="usuario",
+        passive_deletes=True
+    )
+
+    musicas = db.relationship(
+        "Musica",
+        back_populates="usuario",
+        passive_deletes=True
+    )

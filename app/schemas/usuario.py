@@ -1,6 +1,7 @@
 from app.extensions import ma, db
 from app.models.usuario import Usuario
-from marshmallow import fields, validate
+from marshmallow import fields
+
 
 class UsuarioSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -9,10 +10,10 @@ class UsuarioSchema(ma.SQLAlchemyAutoSchema):
         load_instance = True
         fields = ("id", "user", "email", "avaliacoes")
 
-    user = fields.String(required=True, validate=validate.Length(min=1, max=100))
-    email = fields.Email(required=True, validate=validate.Length(max=100))
+    user = fields.String()
+    email = fields.Email()
 
-    avaliacoes = fields.Nested("AvaliacaoSchema", many=True, only=('id', 'nota', 'comentario', 'album')) 
+    avaliacoes = fields.Nested("AvaliacaoSchema", many=True, only=('id', 'nota', 'comentario', 'album'))
 
 usuario_schema = UsuarioSchema()
 usuarios_schema = UsuarioSchema(many=True)

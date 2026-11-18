@@ -1,193 +1,218 @@
-from app.models.avaliacao import Avaliacao
+from datetime import datetime
+
+from sqlalchemy.exc import IntegrityError
+
+from app.extensions import db
 from app.models.album import Album
-from app.models.usuario import Usuario
 from app.models.artista import Artista
+from app.models.avaliacao import Avaliacao
+from app.models.usuario import Usuario
 from app.services.album import AlbumService
 from app.services.artista import ArtistaService
 from app.services.musica import MusicaService
-from app.extensions import db
-from datetime import datetime
+from app.validators.avaliacao import AvaliacaoValidator
+
+
+class FalhaOperacao(Exception):
+    def __init__(self, resultado, status):
+        self.resultado = resultado
+        self.status = status
 
 
 class AvaliacaoService:
     @staticmethod
-    def criar_avaliacao(dados, usuario_id):
-        nota = dados.get('nota')
-        comentario = dados.get('comentario')
-        data_escuta_str = dados.get('data_escuta')
-        album_id = dados.get('album_id')
-        album_data = dados.get('album')
-       
-        if nota is None or nota < 1 or nota > 5:
-            return {"error": f"A nota da avaliação é obrigatória e deve ser um número entre 1 e 5"}, 400
-        
-        if not comentario:
-            return {"error": f"O comentário da avaliação é obrigatório"}, 400
+    def _executar(operacao, *args):
+        resultado, status = operacao(*args, commit=False)
+        if status not in (200, 201):
+            raise FalhaOperacao(resultado, status)
+        return resultado
 
-        data_escuta = None
-        if data_escuta_str:
-            try:
-                data_escuta = datetime.strptime(data_escuta_str, "%Y-%m-%d").date()
-            except ValueError:
-                return {"error": "Formato de data inválido, use YYYY-MM-DD"}, 400
-        else:
-            return {"error": f"A data em que o álbum foi escutado é obrigatória"}, 400
+    @staticmethod
+    def _validar(dados, criacao=False):
+        if not isinstance(dados, dict):
+            return {"error": "Os dados devem ser um objeto JSON"}, 400
+        regras = {
+            "nota": (AvaliacaoValidator.validar_nota, "A nota deve ser um número inteiro entre 1 e 5"),
+            "comentario": (AvaliacaoValidator.validar_comentario, "O comentário deve ter entre 1 e 500 caracteres"),
+            "data_escuta": (AvaliacaoValidator.validar_data_escuta, "Formato de data inválido, use YYYY-MM-DD"),
+        }
+        for campo, (validar, mensagem) in regras.items():
+            if (criacao or campo in dados) and not validar(dados.get(campo)):
+                return {"error": mensagem}, 400
+        return None
 
-        album = None
+    @staticmethod
+    def _atualizar(avaliacao, dados):
+        if "nota" in dados:
+            avaliacao.nota = dados["nota"]
+        if "comentario" in dados:
+            avaliacao.comentario = dados["comentario"].strip()
+        if "data_escuta" in dados:
+            avaliacao.data_escuta = datetime.strptime(
+                dados["data_escuta"], "%Y-%m-%d"
+            ).date()
 
-        if album_id:
-            album = Album.query.get(album_id)
-            if not album:
-                return {
-                    "error": "Álbum não encontrado"
-                }, 404
-        elif album_data:
-            artista_data = album_data.get("artista") 
-            if not artista_data:
-                return {
-                    "error": "O álbum precisa possuir um artista"
-                }, 400
-            
-            artista_nome = artista_data.get("nome")
-            
+    @staticmethod
+    def _transacao(operacao):
+        try:
+            resultado = operacao()
+            db.session.commit()
+            return resultado
+        except FalhaOperacao as erro:
+            db.session.rollback()
+            return erro.resultado, erro.status
+        except IntegrityError:
+            db.session.rollback()
+            return {"error": "Conflito de integridade dos dados"}, 409
+        except Exception:
+            db.session.rollback()
+            raise
+
+    @staticmethod
+    def _obter_album(dados, usuario_id):
+        if "album_id" in dados:
+            album_id = dados["album_id"]
+            if not AvaliacaoValidator.validar_album_id(album_id):
+                raise FalhaOperacao({"error": "ID do álbum inválido"}, 400)
+            album = Album.query.filter_by(id=album_id, usuario_id=usuario_id).first()
+            if album is None:
+                raise FalhaOperacao({"error": "Álbum não encontrado"}, 404)
+            return album
+        album_data = dados.get("album")
+        if not isinstance(album_data, dict):
+            raise FalhaOperacao({"error": "É necessário informar o álbum"}, 400)
+        artista_data = album_data.get("artista")
+        if not isinstance(artista_data, dict):
+            raise FalhaOperacao({"error": "O álbum precisa possuir um artista"}, 400)
+        nome = artista_data.get("nome")
+        artista = None
+        if isinstance(nome, str) and nome.strip():
             artista = Artista.query.filter_by(
-                    nome=artista_nome.strip()).first()
-            if not artista:
-                artista, status = ArtistaService.criar_artista({
-                    "nome": artista_nome,
-                    "genero": artista_data.get("genero", "Não informado"),
-                    "pais": artista_data.get("pais", "Não informado")
-                }, usuario_id)
-                if status != 201:
-                    return artista, status
-
-            album, status = AlbumService.criar_album({
-
-                "titulo": album_data.get("titulo"),
-                "ano": album_data.get("ano"),
-                "artista_id": artista.id
-            }, usuario_id)
-            if status != 201:
-                return album, status
-
-            for musica in album_data.get("musicas", []):
-                musica["album_id"] = album.id
-                musica["artista_id"] = artista.id
-
-                resultado, status = MusicaService.criar_musica(musica, usuario_id)
-
-                if status != 201:
-                    return resultado, status
-        else:
-            return {
-                "error": "É necessário informar o álbum"
-            },400
-        
-        usuario = None
-        if usuario_id:
-            usuario = Usuario.query.get(usuario_id)
-            if not usuario:
-                return {"error": f"O usuário {usuario_id} não foi encontrado"}, 404
-       
-        existente = Avaliacao.query.filter_by(usuario_id=usuario.id, album_id=album.id).first()
-        if existente:
-            return {"error": f"Já existe avaliação para esse álbum"}, 400
-        
-        print("Criando avaliação...")
-        nova_avaliacao = Avaliacao(
-            usuario_id=usuario.id,
-            nota=nota, 
-            comentario=comentario.strip(), 
-            data_escuta=data_escuta,
-            album_id=album.id
-            
+                nome=nome.strip(), usuario_id=usuario_id
+            ).first()
+        if artista is None:
+            artista = AvaliacaoService._executar(
+                ArtistaService.criar_artista,
+                {"nome": nome, "genero": artista_data.get("genero", "Não informado"),
+                 "pais": artista_data.get("pais", "Não informado")},
+                usuario_id,
             )
-        
-        db.session.add(nova_avaliacao)
-        db.session.commit()
+        album = AvaliacaoService._executar(
+            AlbumService.criar_album,
+            {"titulo": album_data.get("titulo"), "ano": album_data.get("ano"),
+             "artista_id": artista.id},
+            usuario_id,
+        )
+        musicas = album_data.get("musicas", [])
+        if not isinstance(musicas, list) or any(
+            not isinstance(m, dict) for m in musicas
+        ):
+            raise FalhaOperacao({"error": "Músicas deve ser uma lista de objetos"}, 400)
+        for musica in musicas:
+            AvaliacaoService._executar(
+                MusicaService.criar_musica,
+                {**musica, "album_id": album.id}, usuario_id,
+            )
+        return album
 
-        return nova_avaliacao, 201
-    
+    @staticmethod
+    def criar_avaliacao(dados, usuario_id):
+        erro = AvaliacaoService._validar(dados, criacao=True)
+        if erro:
+            return erro
+        if db.session.get(Usuario, usuario_id) is None:
+            return {"error": "Usuário não encontrado"}, 404
+        def criar():
+            album = AvaliacaoService._obter_album(dados, usuario_id)
+            existente = Avaliacao.query.filter_by(
+                usuario_id=usuario_id, album_id=album.id
+            ).first()
+            if existente:
+                raise FalhaOperacao({"error": "Já existe avaliação para esse álbum"}, 400)
+            avaliacao = Avaliacao(usuario_id=usuario_id, album_id=album.id)
+            AvaliacaoService._atualizar(avaliacao, dados)
+            db.session.add(avaliacao)
+            return avaliacao, 201
+        return AvaliacaoService._transacao(criar)
+
+    @staticmethod
+    def _editar_musicas(album, musicas, usuario_id):
+        if not isinstance(musicas, list) or any(
+            not isinstance(m, dict) for m in musicas
+        ):
+            raise FalhaOperacao({"error": "Músicas deve ser uma lista de objetos"}, 400)
+        ids = [m["id"] for m in musicas if m.get("id") is not None]
+        if any(type(i) is not int or i <= 0 for i in ids) or len(ids) != len(set(ids)):
+            raise FalhaOperacao({"error": "IDs de músicas inválidos ou repetidos"}, 400)
+        atuais = {musica.id: musica for musica in album.musicas}
+        if any(
+            i not in atuais or atuais[i].usuario_id != usuario_id for i in ids
+        ):
+            raise FalhaOperacao({"error": "Música não pertence a este álbum"}, 403)
+        for musica_id in set(atuais) - set(ids):
+            AvaliacaoService._executar(
+                MusicaService.deletar_musica, musica_id, usuario_id
+            )
+        for musica in musicas:
+            if musica.get("id") is not None:
+                campos = {
+                    k: musica[k] for k in ("titulo", "duracao") if k in musica
+                }
+                AvaliacaoService._executar(
+                    MusicaService.editar_musica, musica["id"], campos, usuario_id
+                )
+            else:
+                AvaliacaoService._executar(
+                    MusicaService.criar_musica,
+                    {**musica, "album_id": album.id}, usuario_id,
+                )
+
     @staticmethod
     def editar_avaliacao(id, dados, usuario_id):
-        avaliacao = Avaliacao.query.get_or_404(id)
-
+        avaliacao = db.get_or_404(Avaliacao, id)
         if avaliacao.usuario_id != usuario_id:
             return {"error": "Você não tem permissão para editar esta avaliação"}, 403
-        
-        if "nota" in dados:
-            nota = int(dados["nota"])
+        erro = AvaliacaoService._validar(dados)
+        if erro:
+            return erro
+        if "album_id" in dados:
+            return {"error": "Não é permitido trocar o álbum"}, 400
 
-            if nota < 1 or nota > 5:
-                return {"error": "A nota da avaliação deve ser entre 1 e 5"}, 400
+        def editar():
+            if "album" in dados:
+                album_data = dados["album"]
+                if not isinstance(album_data, dict):
+                    raise FalhaOperacao({"error": "Álbum deve ser um objeto"}, 400)
+                if any(k in album_data for k in ("artista", "artista_id", "artista_nome")):
+                    raise FalhaOperacao({"error": "Não é permitido trocar o artista"}, 400)
+                album = avaliacao.album
+                if album.usuario_id != usuario_id:
+                    raise FalhaOperacao({"error": "Álbum não pertence ao usuário"}, 403)
+                campos = {
+                    k: album_data[k] for k in ("titulo", "ano") if k in album_data
+                }
+                if campos:
+                    AvaliacaoService._executar(
+                        AlbumService.editar_album, album.id, campos, usuario_id
+                    )
+                if "musicas" in album_data:
+                    AvaliacaoService._editar_musicas(
+                        album, album_data["musicas"], usuario_id
+                    )
+            AvaliacaoService._atualizar(avaliacao, dados)
+            return avaliacao, 200
 
-            avaliacao.nota = nota
+        return AvaliacaoService._transacao(editar)
 
-        if "comentario" in dados:
-            comentario = dados["comentario"]
-            if not comentario:
-                return {"error": "O comentário é obrigatório"}, 400
-
-            avaliacao.comentario = comentario.strip()
-        if "data_escuta" in dados:
-            try:
-                avaliacao.data_escuta = datetime.strptime(dados["data_escuta"],"%Y-%m-%d").date()
-            except ValueError:
-                return {"error": "Formato de data inválido"}, 400
-
-        if "album" in dados:
-
-            album = avaliacao.album
-            album_data = dados["album"]
-
-            if album_data.get("titulo") != album.titulo:
-                album.titulo = album_data["titulo"].strip()
-
-            if album_data.get("ano") != album.ano:
-                album.ano = album_data["ano"]
-
-            if "musicas" in album_data:
-
-                musica_data = album_data["musicas"]
-
-                ids_enviados = [m["id"]for m in musica_data if m.get("id", 0) > 0]
-
-                for musica in album.musicas:
-                    if musica.id not in ids_enviados:
-                        MusicaService.deletar_musica(musica.id, usuario_id)
-
-                for m in musica_data:
-                    if m.get("id", 0) > 0:
-                        musica, status = MusicaService.editar_musica(m["id"],m, usuario_id)
-                        if status != 200:
-                            return musica, status
-                    else:
-                        m["album_id"] = album.id
-                        m["artista_id"] = album.artista_id
-                        musica, status = MusicaService.criar_musica(m, usuario_id)
-
-                        if status != 201:
-                            return musica, status
-
-        db.session.commit()
-
-        return avaliacao, 200
-    
     @staticmethod
     def delete_avaliacao(id, usuario_id):
-        avaliacao = Avaliacao.query.get_or_404(id)
-
+        avaliacao = db.get_or_404(Avaliacao, id)
         if avaliacao.usuario_id != usuario_id:
-            return {"error": "Você não tem permissão para deletar esta avaliação"}, 403
-    
-        titulo_album = avaliacao.album.titulo
-        id_avaliacao = avaliacao.id
+            return {"error": "Você não tem permissão para excluir esta avaliação"}, 403
 
-        db.session.delete(avaliacao)
-        db.session.commit()
+        def excluir():
+            resultado = {"id": avaliacao.id, "album": avaliacao.album.titulo}
+            db.session.delete(avaliacao)
+            return resultado, 200
 
-        return {
-            "id": id_avaliacao,
-            "album": titulo_album
-        }, 200
-        
+        return AvaliacaoService._transacao(excluir)

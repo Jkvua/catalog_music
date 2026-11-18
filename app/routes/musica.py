@@ -18,7 +18,7 @@ def get_musicas():
 @jwt_required()
 def get_musica(id):
     usuario_id = int(get_jwt_identity())
-    musica = Musica.query.get_or_404(id)
+    musica = db.get_or_404(Musica, id)
 
     if musica.usuario_id != usuario_id:
         return jsonify({"error": "Você não tem permissão para acessar músicas que não cadastrou"}), 403
@@ -29,7 +29,7 @@ def get_musica(id):
 @jwt_required()
 def create_musica():
     usuario_id = int(get_jwt_identity())
-    dados = request.get_json()
+    dados = request.get_json(silent=True)
     
     resultado, status = MusicaService.criar_musica(dados,usuario_id)
     if status != 201:
@@ -44,9 +44,9 @@ def create_musica():
 @jwt_required()
 def edit_musica(id):
     usuario_id = int(get_jwt_identity())
-    data = request.get_json()
+    dados = request.get_json(silent=True)
     
-    resultado, status = MusicaService.editar_musica(id, data, usuario_id)
+    resultado, status = MusicaService.editar_musica(id, dados, usuario_id)
     if status != 200:
         return jsonify(resultado), status
     

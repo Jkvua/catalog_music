@@ -1,4 +1,5 @@
-from app.schemas.artista import artista_schema, artistas_schema
+from app.schemas.artista import artista_schema
+from app.models.artista import Artista
 
 def test_validar_artista_schema():
     """Testa a validacao do schemas de artista com dados validos"""
@@ -14,22 +15,20 @@ def test_artista_schema_campos_obrigatorios():
     assert "genero" in erros
     assert "pais" in erros
 
-def test_artista_limite_nome_caracteres():
-    """Testa a validacao de tamanho dos caracteres do nome do artista"""
-    dados_nome_vazio = {"nome": "", "genero": "RAP", "pais": "Brasil"}
-    erros_vazio = artista_schema.validate(dados_nome_vazio)
-    assert "nome" in erros_vazio
+def test_artista_schema_serializacao():
+    """Testa a serialização dos campos de um artista."""
 
-    dados_nome_gigante = {"nome": "A" * 201, "genero": "RAP", "pais": "Brasil"}
-    erros_gigante = artista_schema.validate(dados_nome_gigante)
-    assert "nome" in erros_gigante
+    # Arrange
+    artista = Artista(
+        nome="TWICE",
+        genero="K-POP",
+        pais="Coreia do Sul"
+    )
 
-def test_artista_limite_pais_caracteres():
-    """Testa a validacao de tamanho dos caracteres do pais do artista"""
-    dados_pais_vazio = {"nome": "TWICE", "genero": "K-POP", "pais": ""}
-    erros_vazio = artista_schema.validate(dados_pais_vazio)
-    assert "pais" in erros_vazio
+    # Act
+    resultado = artista_schema.dump(artista)
 
-    dados_pais_gigante = {"nome": "TWICE", "genero": "K-POP", "pais": "A" * 201}
-    erros_gigante = artista_schema.validate(dados_pais_gigante)
-    assert "pais" in erros_gigante
+    # Assert
+    assert resultado["nome"] == "TWICE"
+    assert resultado["genero"] == "K-POP"
+    assert resultado["pais"] == "Coreia do Sul"
