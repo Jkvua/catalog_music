@@ -205,7 +205,7 @@ def validar_operacional(diretorio, categoria, codigo_teste):
 
     return "valida", "registro_operacional_completo"
 
-def validar_cenario(diretorio, cenario, registros_testes, metricas, referencia):
+def validar_cenario(diretorio, cenario, repeticao, registros_testes, metricas, referencia):
     esperadas = CATEGORIAS[cenario]
     motivos_invalidos = []
     motivos_revisao = []
@@ -239,10 +239,10 @@ def validar_cenario(diretorio, cenario, registros_testes, metricas, referencia):
             dados = analisar_xml(caminho)
             validar_completude(caminho, categoria, referencia)
             metricas.append({
-                "versao": diretorio.parents[3].name,
-                "execucao": diretorio.parents[2].name,
-                "repeticao": diretorio.parent.name,
-                "cenario": diretorio.name,
+                "versao": diretorio.parents[2].name,
+                "execucao": diretorio.parents[1].name,
+                "repeticao": repeticao,
+                "cenario": cenario,
                 "categoria": categoria,
                 **dados,
             })
@@ -407,6 +407,7 @@ def processar_execucao(diretorio_execucao, metricas, validade, referencia):
             status, motivo = validar_cenario(
                 diretorio,
                 cenario,
+                repeticao,
                 testes_cenario,
                 metricas,
                 referencia,
