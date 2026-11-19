@@ -75,15 +75,6 @@ class MusicaService:
                 "error": "É necessário informar o nome ou o ID do álbum"
             }, 400
 
-        existente = Musica.query.filter_by(
-            titulo=titulo,
-            album_id=album.id
-        ).first()
-
-        if existente:
-            return {
-                "error": f"A música '{titulo}' já existe neste álbum"
-            }, 400
 
         nova_musica = Musica(
             usuario_id=usuario_id,
