@@ -9,6 +9,15 @@ cd "$(dirname "$0")/.."
 # Quantidade inicial de repetições
 VERSAO="${2:-piloto}"
 REPETICOES="${1:-1}"
+CENARIO_SELECIONADO="${3:-todos}"
+
+if [[ "$CENARIO_SELECIONADO" != "todos" &&
+      "$CENARIO_SELECIONADO" != "a" &&
+      "$CENARIO_SELECIONADO" != "b" &&
+      "$CENARIO_SELECIONADO" != "c" ]]; then
+    echo "Erro: configuração inválida. Use a, b, c ou todos."
+    exit 1
+fi
 
 if ! [[ "$VERSAO" =~ ^[a-zA-Z0-9_-]+$ ]]; then
     echo "Erro: nome de versão inválido."
@@ -28,9 +37,28 @@ DIRETORIO_RELATIVO="${RESULTADOS#"$PWD/resultados/"}"
 
 mkdir -p "$RESULTADOS"
 
+# Registra os metadados da execução experimental.
+GIT_COMMIT="$(git rev-parse HEAD)"
+GIT_BRANCH="$(git branch --show-current)"
+
+printf 'identificador,versao,repeticoes_solicitadas,cenario_solicitado,git_commit,git_branch\n' \
+    > "$RESULTADOS/metadados.csv"
+
+printf '%s,%s,%s,%s,%s,%s\n' \
+    "$IDENTIFICADOR" \
+    "$VERSAO" \
+    "$REPETICOES" \
+    "$CENARIO_SELECIONADO" \
+    "$GIT_COMMIT" \
+    "$GIT_BRANCH" \
+    >> "$RESULTADOS/metadados.csv"
+
 # Arquivo de resumo
 echo "versao,repeticao,cenario,categoria,tempo_segundos,codigo_saida" \
     > "$RESULTADOS/resumo.csv"
+
+echo "versao,repeticao,cenario,tempo_total_segundos,codigo_limpeza" \
+    > "$RESULTADOS/resumo_cenarios.csv"
 
 
 # Executa uma categoria de testes e registra seu resultado
@@ -39,17 +67,40 @@ executar_testes() {
     local diretorio="$2"
 
     local inicio fim tempo
+    local codigo_preparacao=0
     local codigo_saida=0
+
+    local arquivo_operacional="$RESULTADOS/repeticao_${REPETICAO}/cenario_${CENARIO}/${categoria}_operacional.csv"
 
     echo "Executando testes: $categoria"
 
+    printf 'etapa,codigo_saida\n' > "$arquivo_operacional"
+
     inicio=$(date +%s%N)
 
-    docker compose --profile test run --rm \
-        tests python -m pytest "tests/$categoria" \
-        -v --tb=short \
-        --junitxml="/app/resultados/$diretorio/$categoria.xml" \
-        || codigo_saida=$?
+    # Prepara o banco de testes e aguarda sua disponibilidade.
+    docker compose --profile test up -d --wait db-test \
+        || codigo_preparacao=$?
+
+    printf 'preparacao,%s\n' "$codigo_preparacao" \
+        >> "$arquivo_operacional"
+
+    if [[ "$codigo_preparacao" -eq 0 ]]; then
+
+        # Executa o pytest sem iniciar novamente as dependências.
+        docker compose --profile test run --rm --no-deps \
+            tests python -m pytest "tests/$categoria" \
+            -v --tb=short \
+            --junitxml="/app/resultados/$diretorio/$categoria.xml" \
+            || codigo_saida=$?
+
+        printf 'pytest,%s\n' "$codigo_saida" \
+            >> "$arquivo_operacional"
+
+    else
+        echo "Erro: não foi possível preparar o ambiente para $categoria."
+        codigo_saida="$codigo_preparacao"
+    fi
 
     fim=$(date +%s%N)
 
@@ -64,10 +115,14 @@ executar_testes() {
     echo "Código de saída: $codigo_saida"
 }
 
-
 # Executa um cenário experimental
 executar_cenario() {
     CENARIO="$1"
+
+    local inicio_cenario fim_cenario tempo_total
+    local codigo_limpeza=0
+
+    inicio_cenario=$(date +%s%N)
 
     local diretorio="$DIRETORIO_RELATIVO/repeticao_${REPETICAO}/cenario_${CENARIO}"
 
@@ -98,6 +153,7 @@ executar_cenario() {
         inicio=$(date +%s%N)
 
         JUNIT_XML="/app/resultados/$diretorio/e2e.xml" \
+        E2E_STATUS_FILE="$PWD/resultados/$diretorio/e2e_operacional.csv" \
             bash scripts/run-e2e.sh \
             || codigo_saida=$?
 
@@ -115,18 +171,31 @@ executar_cenario() {
     fi
 
     # Limpa os recursos do projeto experimental atual
-    docker compose --profile test down -v --remove-orphans
+    docker compose --profile test down -v --remove-orphans \
+        || codigo_limpeza=$?
+
+    fim_cenario=$(date +%s%N)
+    
+    tempo_total=$(awk -v inicio="$inicio_cenario" -v fim="$fim_cenario" \
+    'BEGIN {printf "%.3f", (fim-inicio)/1000000000}')
+
+    echo "$VERSAO,$REPETICAO,$CENARIO,$tempo_total,$codigo_limpeza" \
+        >> "$RESULTADOS/resumo_cenarios.csv"
 
     echo "Cenário $CENARIO finalizado."
+    echo "Tempo total da configuração: ${tempo_total}s"
+    echo "Código de saída da limpeza: $codigo_limpeza"
 }
 
-
-# Execução do experimento
 for ((REPETICAO=1; REPETICAO<=REPETICOES; REPETICAO++)); do
 
-    executar_cenario a
-    executar_cenario b
-    executar_cenario c
+    if [[ "$CENARIO_SELECIONADO" == "todos" ]]; then
+        executar_cenario a
+        executar_cenario b
+        executar_cenario c
+    else
+        executar_cenario "$CENARIO_SELECIONADO"
+    fi
 
 done
 

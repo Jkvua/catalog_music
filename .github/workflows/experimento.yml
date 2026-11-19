@@ -15,6 +15,17 @@ on:
         default: "1"
         type: string
 
+      cenario:
+        description: "Configuração experimental"
+        required: true
+        default: "todos"
+        type: choice
+        options:
+          - todos
+          - a
+          - b
+          - c
+
 jobs:
   experimento:
     name: Execução dos cenários A, B e C
@@ -32,7 +43,8 @@ jobs:
         run: |
           bash scripts/run-experimento.sh \
             "${{ inputs.repeticoes }}" \
-            "${{ inputs.versao }}"
+            "${{ inputs.versao }}" \
+            "${{ inputs.cenario }}"
       
       - name: Extrair métricas
         if: always()
