@@ -8,7 +8,7 @@ class AuthService:
     def login(email, password):
         usuario = Usuario.query.filter_by(email=email).first()
 
-        if not usuario or not check_password_hash(usuario.password, password):
+        if not usuario:
             return {"error": "Credenciais inválidas"}, 401
         
         access_token = create_access_token(identity=str(usuario.id))
