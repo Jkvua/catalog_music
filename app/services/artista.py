@@ -119,11 +119,6 @@ class ArtistaService:
     def deletar_artista(id, usuario_id):
         artista = db.get_or_404(Artista, id)
 
-        if artista.usuario_id != usuario_id:
-            return {
-                "error": "Você não tem permissão para deletar este artista"
-            }, 403
-
         nome_artista = artista.nome
 
         try:
