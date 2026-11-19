@@ -195,10 +195,14 @@ class AvaliacaoService:
                     AvaliacaoService._executar(
                         AlbumService.editar_album, album.id, campos, usuario_id
                     )
+
+                    db.session.commit()
+
                 if "musicas" in album_data:
                     AvaliacaoService._editar_musicas(
                         album, album_data["musicas"], usuario_id
                     )
+                    
             AvaliacaoService._atualizar(avaliacao, dados)
             return avaliacao, 200
 
