@@ -6,7 +6,7 @@ class AvaliacaoValidator:
 
     @staticmethod
     def validar_nota(nota):
-        return type(nota) is int and 1 <= nota <= 5
+        return type(nota) is int and nota >= 1
 
     @staticmethod
     def validar_comentario(comentario):
