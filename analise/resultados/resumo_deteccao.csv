@@ -1,0 +1,4 @@
+configuracao,defeitos_introduzidos,defeitos_detectados,defeitos_nao_detectados,taxa_deteccao
+a,5,1,4,20.0
+b,5,4,1,80.0
+c,5,4,1,80.0

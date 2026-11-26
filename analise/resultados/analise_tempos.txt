@@ -1,0 +1,1036 @@
+
+==================================================
+Versão: baseline
+
+Configuração: A
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 13.976 s
+Repetição 2: 7.698 s
+Repetição 3: 7.763 s
+Repetição 4: 7.426 s
+Repetição 5: 7.635 s
+
+Estatísticas:
+Média: 8.900 s
+Desvio-padrão amostral: 2.841 s
+Mínimo: 7.426 s
+Máximo: 13.976 s
+
+Configuração: B
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 7.671 s
+Repetição 2: 7.409 s
+Repetição 3: 7.535 s
+Repetição 4: 7.408 s
+Repetição 5: 7.444 s
+
+Estatísticas:
+Média: 7.493 s
+Desvio-padrão amostral: 0.112 s
+Mínimo: 7.408 s
+Máximo: 7.671 s
+
+Configuração: B
+Categoria: Integracao
+
+Tempos registrados:
+Repetição 1: 24.900 s
+Repetição 2: 28.282 s
+Repetição 3: 26.001 s
+Repetição 4: 26.610 s
+Repetição 5: 29.848 s
+
+Estatísticas:
+Média: 27.128 s
+Desvio-padrão amostral: 1.951 s
+Mínimo: 24.900 s
+Máximo: 29.848 s
+
+Configuração: C
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 7.607 s
+Repetição 2: 7.608 s
+Repetição 3: 7.471 s
+Repetição 4: 7.547 s
+Repetição 5: 7.662 s
+
+Estatísticas:
+Média: 7.579 s
+Desvio-padrão amostral: 0.073 s
+Mínimo: 7.471 s
+Máximo: 7.662 s
+
+Configuração: C
+Categoria: Integracao
+
+Tempos registrados:
+Repetição 1: 25.873 s
+Repetição 2: 34.122 s
+Repetição 3: 24.670 s
+Repetição 4: 27.001 s
+Repetição 5: 27.757 s
+
+Estatísticas:
+Média: 27.885 s
+Desvio-padrão amostral: 3.677 s
+Mínimo: 24.670 s
+Máximo: 34.122 s
+
+Configuração: C
+Categoria: E2e
+
+Tempos registrados:
+Repetição 1: 14.578 s
+Repetição 2: 15.177 s
+Repetição 3: 14.376 s
+Repetição 4: 15.167 s
+Repetição 5: 14.738 s
+
+Estatísticas:
+Média: 14.807 s
+Desvio-padrão amostral: 0.357 s
+Mínimo: 14.376 s
+Máximo: 15.177 s
+
+--- TEMPOS TOTAIS DAS CONFIGURAÇÕES ---
+
+Configuração: A
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 14.405 s
+Repetição 2: 8.021 s
+Repetição 3: 8.174 s
+Repetição 4: 7.724 s
+Repetição 5: 7.981 s
+
+Estatísticas:
+Média: 9.261 s
+Desvio-padrão amostral: 2.880 s
+Mínimo: 7.724 s
+Máximo: 14.405 s
+
+Configuração: B
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 32.945 s
+Repetição 2: 36.135 s
+Repetição 3: 33.903 s
+Repetição 4: 34.397 s
+Repetição 5: 37.744 s
+
+Estatísticas:
+Média: 35.025 s
+Desvio-padrão amostral: 1.911 s
+Mínimo: 32.945 s
+Máximo: 37.744 s
+
+Configuração: C
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 48.541 s
+Repetição 2: 57.614 s
+Repetição 3: 47.041 s
+Repetição 4: 50.158 s
+Repetição 5: 50.569 s
+
+Estatísticas:
+Média: 50.785 s
+Desvio-padrão amostral: 4.066 s
+Mínimo: 47.041 s
+Máximo: 57.614 s
+
+==================================================
+Versão: d1
+
+Configuração: A
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 13.776 s
+Repetição 2: 7.111 s
+Repetição 3: 7.065 s
+Repetição 4: 7.106 s
+Repetição 5: 7.368 s
+
+Estatísticas:
+Média: 8.485 s
+Desvio-padrão amostral: 2.960 s
+Mínimo: 7.065 s
+Máximo: 13.776 s
+
+Configuração: B
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 7.016 s
+Repetição 2: 7.041 s
+Repetição 3: 7.120 s
+Repetição 4: 7.244 s
+Repetição 5: 7.317 s
+
+Estatísticas:
+Média: 7.148 s
+Desvio-padrão amostral: 0.130 s
+Mínimo: 7.016 s
+Máximo: 7.317 s
+
+Configuração: B
+Categoria: Integracao
+
+Tempos registrados:
+Repetição 1: 19.342 s
+Repetição 2: 18.711 s
+Repetição 3: 19.434 s
+Repetição 4: 19.382 s
+Repetição 5: 19.836 s
+
+Estatísticas:
+Média: 19.341 s
+Desvio-padrão amostral: 0.404 s
+Mínimo: 18.711 s
+Máximo: 19.836 s
+
+Configuração: C
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 7.117 s
+Repetição 2: 7.182 s
+Repetição 3: 7.309 s
+Repetição 4: 7.322 s
+Repetição 5: 7.401 s
+
+Estatísticas:
+Média: 7.266 s
+Desvio-padrão amostral: 0.115 s
+Mínimo: 7.117 s
+Máximo: 7.401 s
+
+Configuração: C
+Categoria: Integracao
+
+Tempos registrados:
+Repetição 1: 18.618 s
+Repetição 2: 19.279 s
+Repetição 3: 19.253 s
+Repetição 4: 19.637 s
+Repetição 5: 19.948 s
+
+Estatísticas:
+Média: 19.347 s
+Desvio-padrão amostral: 0.498 s
+Mínimo: 18.618 s
+Máximo: 19.948 s
+
+Configuração: C
+Categoria: E2e
+
+Tempos registrados:
+Repetição 1: 13.809 s
+Repetição 2: 13.614 s
+Repetição 3: 13.647 s
+Repetição 4: 13.964 s
+Repetição 5: 14.035 s
+
+Estatísticas:
+Média: 13.814 s
+Desvio-padrão amostral: 0.187 s
+Mínimo: 13.614 s
+Máximo: 14.035 s
+
+--- TEMPOS TOTAIS DAS CONFIGURAÇÕES ---
+
+Configuração: A
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 14.059 s
+Repetição 2: 7.394 s
+Repetição 3: 7.412 s
+Repetição 4: 7.389 s
+Repetição 5: 7.658 s
+
+Estatísticas:
+Média: 8.782 s
+Desvio-padrão amostral: 2.952 s
+Mínimo: 7.389 s
+Máximo: 14.059 s
+
+Configuração: B
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 26.719 s
+Repetição 2: 26.098 s
+Repetição 3: 26.955 s
+Repetição 4: 26.989 s
+Repetição 5: 27.519 s
+
+Estatísticas:
+Média: 26.856 s
+Desvio-padrão amostral: 0.515 s
+Mínimo: 26.098 s
+Máximo: 27.519 s
+
+Configuração: C
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 39.901 s
+Repetição 2: 40.422 s
+Repetição 3: 40.559 s
+Repetição 4: 41.447 s
+Repetição 5: 41.829 s
+
+Estatísticas:
+Média: 40.832 s
+Desvio-padrão amostral: 0.788 s
+Mínimo: 39.901 s
+Máximo: 41.829 s
+
+==================================================
+Versão: d2
+
+Configuração: A
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 14.492 s
+Repetição 2: 8.008 s
+Repetição 3: 7.930 s
+Repetição 4: 7.971 s
+Repetição 5: 8.004 s
+
+Estatísticas:
+Média: 9.281 s
+Desvio-padrão amostral: 2.913 s
+Mínimo: 7.930 s
+Máximo: 14.492 s
+
+Configuração: B
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 7.951 s
+Repetição 2: 8.003 s
+Repetição 3: 7.986 s
+Repetição 4: 8.013 s
+Repetição 5: 7.935 s
+
+Estatísticas:
+Média: 7.978 s
+Desvio-padrão amostral: 0.034 s
+Mínimo: 7.935 s
+Máximo: 8.013 s
+
+Configuração: B
+Categoria: Integracao
+
+Tempos registrados:
+Repetição 1: 28.392 s
+Repetição 2: 29.032 s
+Repetição 3: 28.753 s
+Repetição 4: 28.666 s
+Repetição 5: 28.357 s
+
+Estatísticas:
+Média: 28.640 s
+Desvio-padrão amostral: 0.278 s
+Mínimo: 28.357 s
+Máximo: 29.032 s
+
+Configuração: C
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 7.927 s
+Repetição 2: 8.025 s
+Repetição 3: 7.912 s
+Repetição 4: 8.002 s
+Repetição 5: 7.966 s
+
+Estatísticas:
+Média: 7.966 s
+Desvio-padrão amostral: 0.048 s
+Mínimo: 7.912 s
+Máximo: 8.025 s
+
+Configuração: C
+Categoria: Integracao
+
+Tempos registrados:
+Repetição 1: 28.657 s
+Repetição 2: 28.793 s
+Repetição 3: 28.788 s
+Repetição 4: 28.692 s
+Repetição 5: 28.303 s
+
+Estatísticas:
+Média: 28.647 s
+Desvio-padrão amostral: 0.201 s
+Mínimo: 28.303 s
+Máximo: 28.793 s
+
+Configuração: C
+Categoria: E2e
+
+Tempos registrados:
+Repetição 1: 15.226 s
+Repetição 2: 15.352 s
+Repetição 3: 15.175 s
+Repetição 4: 15.222 s
+Repetição 5: 15.189 s
+
+Estatísticas:
+Média: 15.233 s
+Desvio-padrão amostral: 0.070 s
+Mínimo: 15.175 s
+Máximo: 15.352 s
+
+--- TEMPOS TOTAIS DAS CONFIGURAÇÕES ---
+
+Configuração: A
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 14.780 s
+Repetição 2: 8.301 s
+Repetição 3: 8.217 s
+Repetição 4: 8.261 s
+Repetição 5: 8.295 s
+
+Estatísticas:
+Média: 9.571 s
+Desvio-padrão amostral: 2.912 s
+Mínimo: 8.217 s
+Máximo: 14.780 s
+
+Configuração: B
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 36.698 s
+Repetição 2: 37.387 s
+Repetição 3: 37.102 s
+Repetição 4: 37.023 s
+Repetição 5: 36.643 s
+
+Estatísticas:
+Média: 36.971 s
+Desvio-padrão amostral: 0.306 s
+Mínimo: 36.643 s
+Máximo: 37.387 s
+
+Configuração: C
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 52.165 s
+Repetição 2: 52.543 s
+Repetição 3: 52.237 s
+Repetição 4: 52.283 s
+Repetição 5: 51.827 s
+
+Estatísticas:
+Média: 52.211 s
+Desvio-padrão amostral: 0.258 s
+Mínimo: 51.827 s
+Máximo: 52.543 s
+
+==================================================
+Versão: d3
+
+Configuração: A
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 11.781 s
+Repetição 2: 8.024 s
+Repetição 3: 7.970 s
+Repetição 4: 7.880 s
+Repetição 5: 7.869 s
+
+Estatísticas:
+Média: 8.705 s
+Desvio-padrão amostral: 1.721 s
+Mínimo: 7.869 s
+Máximo: 11.781 s
+
+Configuração: B
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 7.908 s
+Repetição 2: 8.000 s
+Repetição 3: 7.971 s
+Repetição 4: 7.856 s
+Repetição 5: 7.884 s
+
+Estatísticas:
+Média: 7.924 s
+Desvio-padrão amostral: 0.060 s
+Mínimo: 7.856 s
+Máximo: 8.000 s
+
+Configuração: B
+Categoria: Integracao
+
+Tempos registrados:
+Repetição 1: 22.867 s
+Repetição 2: 22.995 s
+Repetição 3: 22.622 s
+Repetição 4: 21.976 s
+Repetição 5: 22.568 s
+
+Estatísticas:
+Média: 22.606 s
+Desvio-padrão amostral: 0.393 s
+Mínimo: 21.976 s
+Máximo: 22.995 s
+
+Configuração: C
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 8.054 s
+Repetição 2: 7.992 s
+Repetição 3: 7.942 s
+Repetição 4: 7.859 s
+Repetição 5: 7.916 s
+
+Estatísticas:
+Média: 7.953 s
+Desvio-padrão amostral: 0.074 s
+Mínimo: 7.859 s
+Máximo: 8.054 s
+
+Configuração: C
+Categoria: Integracao
+
+Tempos registrados:
+Repetição 1: 22.396 s
+Repetição 2: 22.954 s
+Repetição 3: 22.440 s
+Repetição 4: 22.388 s
+Repetição 5: 22.997 s
+
+Estatísticas:
+Média: 22.635 s
+Desvio-padrão amostral: 0.312 s
+Mínimo: 22.388 s
+Máximo: 22.997 s
+
+Configuração: C
+Categoria: E2e
+
+Tempos registrados:
+Repetição 1: 14.612 s
+Repetição 2: 14.704 s
+Repetição 3: 14.565 s
+Repetição 4: 14.456 s
+Repetição 5: 14.576 s
+
+Estatísticas:
+Média: 14.583 s
+Desvio-padrão amostral: 0.089 s
+Mínimo: 14.456 s
+Máximo: 14.704 s
+
+--- TEMPOS TOTAIS DAS CONFIGURAÇÕES ---
+
+Configuração: A
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 12.070 s
+Repetição 2: 8.313 s
+Repetição 3: 8.254 s
+Repetição 4: 8.160 s
+Repetição 5: 8.142 s
+
+Estatísticas:
+Média: 8.988 s
+Desvio-padrão amostral: 1.724 s
+Mínimo: 8.142 s
+Máximo: 12.070 s
+
+Configuração: B
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 31.132 s
+Repetição 2: 31.352 s
+Repetição 3: 30.932 s
+Repetição 4: 30.172 s
+Repetição 5: 30.809 s
+
+Estatísticas:
+Média: 30.879 s
+Desvio-padrão amostral: 0.446 s
+Mínimo: 30.172 s
+Máximo: 31.352 s
+
+Configuração: C
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 45.411 s
+Repetição 2: 46.040 s
+Repetição 3: 45.296 s
+Repetição 4: 45.047 s
+Repetição 5: 45.839 s
+
+Estatísticas:
+Média: 45.527 s
+Desvio-padrão amostral: 0.406 s
+Mínimo: 45.047 s
+Máximo: 46.040 s
+
+==================================================
+Versão: d4
+
+Configuração: A
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 13.274 s
+Repetição 2: 7.119 s
+Repetição 3: 7.099 s
+Repetição 4: 7.089 s
+Repetição 5: 7.130 s
+
+Estatísticas:
+Média: 8.342 s
+Desvio-padrão amostral: 2.757 s
+Mínimo: 7.089 s
+Máximo: 13.274 s
+
+Configuração: B
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 7.146 s
+Repetição 2: 7.145 s
+Repetição 3: 7.100 s
+Repetição 4: 7.091 s
+Repetição 5: 7.133 s
+
+Estatísticas:
+Média: 7.123 s
+Desvio-padrão amostral: 0.026 s
+Mínimo: 7.091 s
+Máximo: 7.146 s
+
+Configuração: B
+Categoria: Integracao
+
+Tempos registrados:
+Repetição 1: 18.279 s
+Repetição 2: 17.532 s
+Repetição 3: 17.328 s
+Repetição 4: 17.663 s
+Repetição 5: 17.500 s
+
+Estatísticas:
+Média: 17.660 s
+Desvio-padrão amostral: 0.366 s
+Mínimo: 17.328 s
+Máximo: 18.279 s
+
+Configuração: C
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 7.141 s
+Repetição 2: 7.085 s
+Repetição 3: 7.111 s
+Repetição 4: 7.101 s
+Repetição 5: 7.098 s
+
+Estatísticas:
+Média: 7.107 s
+Desvio-padrão amostral: 0.021 s
+Mínimo: 7.085 s
+Máximo: 7.141 s
+
+Configuração: C
+Categoria: Integracao
+
+Tempos registrados:
+Repetição 1: 18.332 s
+Repetição 2: 17.545 s
+Repetição 3: 17.286 s
+Repetição 4: 17.840 s
+Repetição 5: 17.925 s
+
+Estatísticas:
+Média: 17.786 s
+Desvio-padrão amostral: 0.396 s
+Mínimo: 17.286 s
+Máximo: 18.332 s
+
+Configuração: C
+Categoria: E2e
+
+Tempos registrados:
+Repetição 1: 13.772 s
+Repetição 2: 13.624 s
+Repetição 3: 13.679 s
+Repetição 4: 13.781 s
+Repetição 5: 13.656 s
+
+Estatísticas:
+Média: 13.702 s
+Desvio-padrão amostral: 0.070 s
+Mínimo: 13.624 s
+Máximo: 13.781 s
+
+--- TEMPOS TOTAIS DAS CONFIGURAÇÕES ---
+
+Configuração: A
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 13.470 s
+Repetição 2: 7.303 s
+Repetição 3: 7.285 s
+Repetição 4: 7.276 s
+Repetição 5: 7.294 s
+
+Estatísticas:
+Média: 8.526 s
+Desvio-padrão amostral: 2.764 s
+Mínimo: 7.276 s
+Máximo: 13.470 s
+
+Configuração: B
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 25.623 s
+Repetição 2: 24.890 s
+Repetição 3: 24.643 s
+Repetição 4: 24.951 s
+Repetição 5: 24.839 s
+
+Estatísticas:
+Média: 24.989 s
+Desvio-padrão amostral: 0.373 s
+Mínimo: 24.643 s
+Máximo: 25.623 s
+
+Configuração: C
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 39.466 s
+Repetição 2: 38.449 s
+Repetição 3: 38.290 s
+Repetição 4: 38.914 s
+Repetição 5: 38.874 s
+
+Estatísticas:
+Média: 38.799 s
+Desvio-padrão amostral: 0.460 s
+Mínimo: 38.290 s
+Máximo: 39.466 s
+
+==================================================
+Versão: d5
+
+Configuração: A
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 14.464 s
+Repetição 2: 7.053 s
+Repetição 3: 7.080 s
+Repetição 4: 7.096 s
+Repetição 5: 7.071 s
+
+Estatísticas:
+Média: 8.553 s
+Desvio-padrão amostral: 3.304 s
+Mínimo: 7.053 s
+Máximo: 14.464 s
+
+Configuração: B
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 7.077 s
+Repetição 2: 7.074 s
+Repetição 3: 7.059 s
+Repetição 4: 7.059 s
+Repetição 5: 7.048 s
+
+Estatísticas:
+Média: 7.063 s
+Desvio-padrão amostral: 0.012 s
+Mínimo: 7.048 s
+Máximo: 7.077 s
+
+Configuração: B
+Categoria: Integracao
+
+Tempos registrados:
+Repetição 1: 16.655 s
+Repetição 2: 16.718 s
+Repetição 3: 16.662 s
+Repetição 4: 16.733 s
+Repetição 5: 16.695 s
+
+Estatísticas:
+Média: 16.693 s
+Desvio-padrão amostral: 0.034 s
+Mínimo: 16.655 s
+Máximo: 16.733 s
+
+Configuração: C
+Categoria: Unitarios
+
+Tempos registrados:
+Repetição 1: 7.082 s
+Repetição 2: 7.081 s
+Repetição 3: 7.064 s
+Repetição 4: 7.067 s
+Repetição 5: 7.057 s
+
+Estatísticas:
+Média: 7.070 s
+Desvio-padrão amostral: 0.011 s
+Mínimo: 7.057 s
+Máximo: 7.082 s
+
+Configuração: C
+Categoria: Integracao
+
+Tempos registrados:
+Repetição 1: 16.761 s
+Repetição 2: 16.689 s
+Repetição 3: 16.883 s
+Repetição 4: 16.771 s
+Repetição 5: 16.705 s
+
+Estatísticas:
+Média: 16.762 s
+Desvio-padrão amostral: 0.076 s
+Mínimo: 16.689 s
+Máximo: 16.883 s
+
+Configuração: C
+Categoria: E2e
+
+Tempos registrados:
+Repetição 1: 13.632 s
+Repetição 2: 13.623 s
+Repetição 3: 13.642 s
+Repetição 4: 13.634 s
+Repetição 5: 13.624 s
+
+Estatísticas:
+Média: 13.631 s
+Desvio-padrão amostral: 0.008 s
+Mínimo: 13.623 s
+Máximo: 13.642 s
+
+--- TEMPOS TOTAIS DAS CONFIGURAÇÕES ---
+
+Configuração: A
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 14.638 s
+Repetição 2: 7.218 s
+Repetição 3: 7.265 s
+Repetição 4: 7.270 s
+Repetição 5: 7.240 s
+
+Estatísticas:
+Média: 8.726 s
+Desvio-padrão amostral: 3.305 s
+Mínimo: 7.218 s
+Máximo: 14.638 s
+
+Configuração: B
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 23.928 s
+Repetição 2: 23.998 s
+Repetição 3: 23.911 s
+Repetição 4: 23.993 s
+Repetição 5: 23.940 s
+
+Estatísticas:
+Média: 23.954 s
+Desvio-padrão amostral: 0.039 s
+Mínimo: 23.911 s
+Máximo: 23.998 s
+
+Configuração: C
+Métrica: Tempo total da configuração
+
+Tempos registrados:
+Repetição 1: 37.692 s
+Repetição 2: 37.585 s
+Repetição 3: 37.811 s
+Repetição 4: 37.682 s
+Repetição 5: 37.588 s
+
+Estatísticas:
+Média: 37.672 s
+Desvio-padrão amostral: 0.093 s
+Mínimo: 37.585 s
+Máximo: 37.811 s
+
+--- TABELA CONSOLIDADA: TEMPOS TOTAIS (s) ---
+Valores apresentados como média ± desvio-padrão amostral
+Versão                        A                  B                  C
+baseline          9.261 ± 2.880     35.025 ± 1.911     50.785 ± 4.066
+d1                8.782 ± 2.952     26.856 ± 0.515     40.832 ± 0.788
+d2                9.571 ± 2.912     36.971 ± 0.306     52.211 ± 0.258
+d3                8.988 ± 1.724     30.879 ± 0.446     45.527 ± 0.406
+d4                8.526 ± 2.764     24.989 ± 0.373     38.799 ± 0.460
+d5                8.726 ± 3.305     23.954 ± 0.039     37.672 ± 0.093
+
+--- TABELA CONSOLIDADA: MÍNIMO E MÁXIMO (s) ---
+Versão                        A                  B                  C
+baseline         7.724 – 14.405    32.945 – 37.744    47.041 – 57.614
+d1               7.389 – 14.059    26.098 – 27.519    39.901 – 41.829
+d2               8.217 – 14.780    36.643 – 37.387    51.827 – 52.543
+d3               8.142 – 12.070    30.172 – 31.352    45.047 – 46.040
+d4               7.276 – 13.470    24.643 – 25.623    38.290 – 39.466
+d5               7.218 – 14.638    23.911 – 23.998    37.585 – 37.811
+
+--- TABELA CONSOLIDADA: TEMPO POR NÍVEL DE TESTE (s) ---
+Valores apresentados como média ± desvio-padrão amostral
+Versão       Config.    Nível                      Tempo (s)
+baseline     A          unitarios              8.900 ± 2.841
+baseline     B          unitarios              7.493 ± 0.112
+baseline     B          integracao            27.128 ± 1.951
+baseline     C          unitarios              7.579 ± 0.073
+baseline     C          integracao            27.885 ± 3.677
+baseline     C          e2e                   14.807 ± 0.357
+d1           A          unitarios              8.485 ± 2.960
+d1           B          unitarios              7.148 ± 0.130
+d1           B          integracao            19.341 ± 0.404
+d1           C          unitarios              7.266 ± 0.115
+d1           C          integracao            19.347 ± 0.498
+d1           C          e2e                   13.814 ± 0.187
+d2           A          unitarios              9.281 ± 2.913
+d2           B          unitarios              7.978 ± 0.034
+d2           B          integracao            28.640 ± 0.278
+d2           C          unitarios              7.966 ± 0.048
+d2           C          integracao            28.647 ± 0.201
+d2           C          e2e                   15.233 ± 0.070
+d3           A          unitarios              8.705 ± 1.721
+d3           B          unitarios              7.924 ± 0.060
+d3           B          integracao            22.606 ± 0.393
+d3           C          unitarios              7.953 ± 0.074
+d3           C          integracao            22.635 ± 0.312
+d3           C          e2e                   14.583 ± 0.089
+d4           A          unitarios              8.342 ± 2.757
+d4           B          unitarios              7.123 ± 0.026
+d4           B          integracao            17.660 ± 0.366
+d4           C          unitarios              7.107 ± 0.021
+d4           C          integracao            17.786 ± 0.396
+d4           C          e2e                   13.702 ± 0.070
+d5           A          unitarios              8.553 ± 3.304
+d5           B          unitarios              7.063 ± 0.012
+d5           B          integracao            16.693 ± 0.034
+d5           C          unitarios              7.070 ± 0.011
+d5           C          integracao            16.762 ± 0.076
+d5           C          e2e                   13.631 ± 0.008
+
+--- TABELA CONSOLIDADA: MÍNIMO E MÁXIMO POR NÍVEL (s) ---
+Versão       Config.    Nível                  Intervalo (s)
+baseline     A          unitarios             7.426 – 13.976
+baseline     B          unitarios              7.408 – 7.671
+baseline     B          integracao           24.900 – 29.848
+baseline     C          unitarios              7.471 – 7.662
+baseline     C          integracao           24.670 – 34.122
+baseline     C          e2e                  14.376 – 15.177
+d1           A          unitarios             7.065 – 13.776
+d1           B          unitarios              7.016 – 7.317
+d1           B          integracao           18.711 – 19.836
+d1           C          unitarios              7.117 – 7.401
+d1           C          integracao           18.618 – 19.948
+d1           C          e2e                  13.614 – 14.035
+d2           A          unitarios             7.930 – 14.492
+d2           B          unitarios              7.935 – 8.013
+d2           B          integracao           28.357 – 29.032
+d2           C          unitarios              7.912 – 8.025
+d2           C          integracao           28.303 – 28.793
+d2           C          e2e                  15.175 – 15.352
+d3           A          unitarios             7.869 – 11.781
+d3           B          unitarios              7.856 – 8.000
+d3           B          integracao           21.976 – 22.995
+d3           C          unitarios              7.859 – 8.054
+d3           C          integracao           22.388 – 22.997
+d3           C          e2e                  14.456 – 14.704
+d4           A          unitarios             7.089 – 13.274
+d4           B          unitarios              7.091 – 7.146
+d4           B          integracao           17.328 – 18.279
+d4           C          unitarios              7.085 – 7.141
+d4           C          integracao           17.286 – 18.332
+d4           C          e2e                  13.624 – 13.781
+d5           A          unitarios             7.053 – 14.464
+d5           B          unitarios              7.048 – 7.077
+d5           B          integracao           16.655 – 16.733
+d5           C          unitarios              7.057 – 7.082
+d5           C          integracao           16.689 – 16.883
+d5           C          e2e                  13.623 – 13.642
+
+--- TABELA CONSOLIDADA: TEMPO CONJUNTO DOS TESTES (s) ---
+Valores apresentados como média ± desvio-padrão amostral
+Versão                        A                  B                  C
+baseline          8.900 ± 2.841     34.622 ± 1.872     50.271 ± 3.980
+d1                8.485 ± 2.960     26.489 ± 0.506     40.427 ± 0.727
+d2                9.281 ± 2.913     36.618 ± 0.306     51.846 ± 0.256
+d3                8.705 ± 1.721     30.529 ± 0.440     45.170 ± 0.391
+d4                8.342 ± 2.757     24.783 ± 0.378     38.595 ± 0.456
+d5                8.553 ± 3.304     23.756 ± 0.034     37.463 ± 0.082
+
+--- TABELA CONSOLIDADA: MÍNIMOS E MÁXIMOS DO TEMPO CONJUNTO (s) ---
+Versão                        A                  B                  C
+baseline         7.426 – 13.976    32.571 – 37.292    46.517 – 56.907
+d1               7.065 – 13.776    25.752 – 27.153    39.544 – 41.384
+d2               7.930 – 14.492    36.292 – 37.035    51.458 – 52.170
+d3               7.869 – 11.781    29.832 – 30.995    44.703 – 45.650
+d4               7.089 – 13.274    24.428 – 25.425    38.076 – 39.245
+d5               7.053 – 14.464    23.721 – 23.792    37.386 – 37.589
+
+--- TABELA CONSOLIDADA: TEMPO TOTAL DO PIPELINE (s) ---
+Versão             Tempo (s)
+baseline             516.000
+d1                   419.000
+d2                   539.000
+d3                   468.000
+d4                   409.000
+d5                   402.000
+
+--- TEMPO TOTAL MÉDIO POR CONFIGURAÇÃO (D1-D5) ---
+Configuração         Tempo médio (s)
+A                              8.919
+B                             28.730
+C                             43.008
+
+--- COMPARAÇÃO INCREMENTAL DOS TEMPOS ---
+
+A -> B
+Aumento absoluto: 19.811 s
+Aumento percentual: 222.14%
+
+B -> C
+Aumento absoluto: 14.278 s
+Aumento percentual: 49.70%

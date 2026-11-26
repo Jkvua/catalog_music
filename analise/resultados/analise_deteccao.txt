@@ -1,0 +1,438 @@
+
+======================================================================
+VERSÃO: BASELINE
+======================================================================
+
+Configuração A
+  Categoria: unitarios
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Detecção: NÃO
+  Repetições com detecção: 0/5
+
+Configuração B
+  Categoria: unitarios
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Categoria: integracao
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Detecção: NÃO
+  Repetições com detecção: 0/5
+
+Configuração C
+  Categoria: unitarios
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Categoria: integracao
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Categoria: e2e
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Detecção: NÃO
+  Repetições com detecção: 0/5
+
+----------------------------------------------------------------------
+CASOS DE TESTE COM FALHAS — BASELINE
+----------------------------------------------------------------------
+Nenhum caso de teste apresentou falhas.
+
+======================================================================
+VERSÃO: D1
+======================================================================
+
+Configuração A
+  Categoria: unitarios
+    Falhas por repetição: [1, 1, 1, 1, 1]
+    Repetições com falhas: 5/5
+  Detecção: SIM
+  Repetições com detecção: 5/5
+
+Configuração B
+  Categoria: unitarios
+    Falhas por repetição: [1, 1, 1, 1, 1]
+    Repetições com falhas: 5/5
+  Categoria: integracao
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Detecção: SIM
+  Repetições com detecção: 5/5
+
+Configuração C
+  Categoria: unitarios
+    Falhas por repetição: [1, 1, 1, 1, 1]
+    Repetições com falhas: 5/5
+  Categoria: integracao
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Categoria: e2e
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Detecção: SIM
+  Repetições com detecção: 5/5
+
+----------------------------------------------------------------------
+CASOS DE TESTE COM FALHAS — D1
+----------------------------------------------------------------------
+
+Configuração: A
+Categoria: unitarios
+Teste: tests.unitarios.validators.test_avaliacao::test_validar_nota[6-False]
+Repetições com falha: [1, 2, 3, 4, 5]
+Consistência: 5/5
+Mensagem: assert True is False
+ +  where True = <function AvaliacaoValidator.validar_nota at 0x7378cb944680>(6)
+ +    where <function AvaliacaoValidator.validar_nota at 0x7378cb944680> = AvaliacaoValidator.validar_nota
+Mensagem: assert True is False
+ +  where True = <function AvaliacaoValidator.validar_nota at 0x755da2d44680>(6)
+ +    where <function AvaliacaoValidator.validar_nota at 0x755da2d44680> = AvaliacaoValidator.validar_nota
+Mensagem: assert True is False
+ +  where True = <function AvaliacaoValidator.validar_nota at 0x76e49cb7c680>(6)
+ +    where <function AvaliacaoValidator.validar_nota at 0x76e49cb7c680> = AvaliacaoValidator.validar_nota
+Mensagem: assert True is False
+ +  where True = <function AvaliacaoValidator.validar_nota at 0x7a541fd7c680>(6)
+ +    where <function AvaliacaoValidator.validar_nota at 0x7a541fd7c680> = AvaliacaoValidator.validar_nota
+Mensagem: assert True is False
+ +  where True = <function AvaliacaoValidator.validar_nota at 0x7a5433c34680>(6)
+ +    where <function AvaliacaoValidator.validar_nota at 0x7a5433c34680> = AvaliacaoValidator.validar_nota
+
+Configuração: B
+Categoria: unitarios
+Teste: tests.unitarios.validators.test_avaliacao::test_validar_nota[6-False]
+Repetições com falha: [1, 2, 3, 4, 5]
+Consistência: 5/5
+Mensagem: assert True is False
+ +  where True = <function AvaliacaoValidator.validar_nota at 0x708e4aa34680>(6)
+ +    where <function AvaliacaoValidator.validar_nota at 0x708e4aa34680> = AvaliacaoValidator.validar_nota
+Mensagem: assert True is False
+ +  where True = <function AvaliacaoValidator.validar_nota at 0x71a962e7c680>(6)
+ +    where <function AvaliacaoValidator.validar_nota at 0x71a962e7c680> = AvaliacaoValidator.validar_nota
+Mensagem: assert True is False
+ +  where True = <function AvaliacaoValidator.validar_nota at 0x7648b5680680>(6)
+ +    where <function AvaliacaoValidator.validar_nota at 0x7648b5680680> = AvaliacaoValidator.validar_nota
+Mensagem: assert True is False
+ +  where True = <function AvaliacaoValidator.validar_nota at 0x79adc7654680>(6)
+ +    where <function AvaliacaoValidator.validar_nota at 0x79adc7654680> = AvaliacaoValidator.validar_nota
+Mensagem: assert True is False
+ +  where True = <function AvaliacaoValidator.validar_nota at 0x7fe11b944680>(6)
+ +    where <function AvaliacaoValidator.validar_nota at 0x7fe11b944680> = AvaliacaoValidator.validar_nota
+
+Configuração: C
+Categoria: unitarios
+Teste: tests.unitarios.validators.test_avaliacao::test_validar_nota[6-False]
+Repetições com falha: [1, 2, 3, 4, 5]
+Consistência: 5/5
+Mensagem: assert True is False
+ +  where True = <function AvaliacaoValidator.validar_nota at 0x700590080680>(6)
+ +    where <function AvaliacaoValidator.validar_nota at 0x700590080680> = AvaliacaoValidator.validar_nota
+Mensagem: assert True is False
+ +  where True = <function AvaliacaoValidator.validar_nota at 0x70894227c680>(6)
+ +    where <function AvaliacaoValidator.validar_nota at 0x70894227c680> = AvaliacaoValidator.validar_nota
+Mensagem: assert True is False
+ +  where True = <function AvaliacaoValidator.validar_nota at 0x75efa222c680>(6)
+ +    where <function AvaliacaoValidator.validar_nota at 0x75efa222c680> = AvaliacaoValidator.validar_nota
+Mensagem: assert True is False
+ +  where True = <function AvaliacaoValidator.validar_nota at 0x76ff69a34680>(6)
+ +    where <function AvaliacaoValidator.validar_nota at 0x76ff69a34680> = AvaliacaoValidator.validar_nota
+Mensagem: assert True is False
+ +  where True = <function AvaliacaoValidator.validar_nota at 0x772d5cc34680>(6)
+ +    where <function AvaliacaoValidator.validar_nota at 0x772d5cc34680> = AvaliacaoValidator.validar_nota
+
+======================================================================
+VERSÃO: D2
+======================================================================
+
+Configuração A
+  Categoria: unitarios
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Detecção: NÃO
+  Repetições com detecção: 0/5
+
+Configuração B
+  Categoria: unitarios
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Categoria: integracao
+    Falhas por repetição: [2, 2, 2, 2, 2]
+    Repetições com falhas: 5/5
+  Detecção: SIM
+  Repetições com detecção: 5/5
+
+Configuração C
+  Categoria: unitarios
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Categoria: integracao
+    Falhas por repetição: [2, 2, 2, 2, 2]
+    Repetições com falhas: 5/5
+  Categoria: e2e
+    Falhas por repetição: [1, 1, 1, 1, 1]
+    Repetições com falhas: 5/5
+  Detecção: SIM
+  Repetições com detecção: 5/5
+
+----------------------------------------------------------------------
+CASOS DE TESTE COM FALHAS — D2
+----------------------------------------------------------------------
+
+Configuração: B
+Categoria: integracao
+Teste: tests.integracao.routes.test_artista::test_deletar_artista_de_outro_usuario
+Repetições com falha: [1, 2, 3, 4, 5]
+Consistência: 5/5
+Mensagem: assert 200 == 403
+ +  where 200 = <WrapperTestResponse streamed [200 OK]>.status_code
+
+Configuração: B
+Categoria: integracao
+Teste: tests.integracao.services.test_artista::test_deletar_artista_sem_permissao
+Repetições com falha: [1, 2, 3, 4, 5]
+Consistência: 5/5
+Mensagem: assert 200 == 403
+
+Configuração: C
+Categoria: e2e
+Teste: tests.e2e.test_jornada_parcial::test_isolamento_entre_usuarios
+Repetições com falha: [1, 2, 3, 4, 5]
+Consistência: 5/5
+Mensagem: AssertionError: Deveria bloquear exclusão por outro usuário. Status: 200, resposta: {
+    "mensagem": "O artista 'Tim Bernardes 15554209c8' e todos os dados vinculados foram deletados com sucesso"
+  }
+  
+assert 200 == 403
+ +  where 200 = <Response [200]>.status_code
+Mensagem: AssertionError: Deveria bloquear exclusão por outro usuário. Status: 200, resposta: {
+    "mensagem": "O artista 'Tim Bernardes 2489923aea' e todos os dados vinculados foram deletados com sucesso"
+  }
+  
+assert 200 == 403
+ +  where 200 = <Response [200]>.status_code
+Mensagem: AssertionError: Deveria bloquear exclusão por outro usuário. Status: 200, resposta: {
+    "mensagem": "O artista 'Tim Bernardes 93da77fbbb' e todos os dados vinculados foram deletados com sucesso"
+  }
+  
+assert 200 == 403
+ +  where 200 = <Response [200]>.status_code
+Mensagem: AssertionError: Deveria bloquear exclusão por outro usuário. Status: 200, resposta: {
+    "mensagem": "O artista 'Tim Bernardes dbb17ab168' e todos os dados vinculados foram deletados com sucesso"
+  }
+  
+assert 200 == 403
+ +  where 200 = <Response [200]>.status_code
+Mensagem: AssertionError: Deveria bloquear exclusão por outro usuário. Status: 200, resposta: {
+    "mensagem": "O artista 'Tim Bernardes f8e91d8d53' e todos os dados vinculados foram deletados com sucesso"
+  }
+  
+assert 200 == 403
+ +  where 200 = <Response [200]>.status_code
+
+Configuração: C
+Categoria: integracao
+Teste: tests.integracao.routes.test_artista::test_deletar_artista_de_outro_usuario
+Repetições com falha: [1, 2, 3, 4, 5]
+Consistência: 5/5
+Mensagem: assert 200 == 403
+ +  where 200 = <WrapperTestResponse streamed [200 OK]>.status_code
+
+Configuração: C
+Categoria: integracao
+Teste: tests.integracao.services.test_artista::test_deletar_artista_sem_permissao
+Repetições com falha: [1, 2, 3, 4, 5]
+Consistência: 5/5
+Mensagem: assert 200 == 403
+
+======================================================================
+VERSÃO: D3
+======================================================================
+
+Configuração A
+  Categoria: unitarios
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Detecção: NÃO
+  Repetições com detecção: 0/5
+
+Configuração B
+  Categoria: unitarios
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Categoria: integracao
+    Falhas por repetição: [2, 2, 2, 2, 2]
+    Repetições com falhas: 5/5
+  Detecção: SIM
+  Repetições com detecção: 5/5
+
+Configuração C
+  Categoria: unitarios
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Categoria: integracao
+    Falhas por repetição: [2, 2, 2, 2, 2]
+    Repetições com falhas: 5/5
+  Categoria: e2e
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Detecção: SIM
+  Repetições com detecção: 5/5
+
+----------------------------------------------------------------------
+CASOS DE TESTE COM FALHAS — D3
+----------------------------------------------------------------------
+
+Configuração: B
+Categoria: integracao
+Teste: tests.integracao.routes.test_auth_routes::test_login_senha_invalida
+Repetições com falha: [1, 2, 3, 4, 5]
+Consistência: 5/5
+Mensagem: assert 200 == 401
+ +  where 200 = <WrapperTestResponse streamed [200 OK]>.status_code
+
+Configuração: B
+Categoria: integracao
+Teste: tests.integracao.services.test_auth_service::test_login_senha_incorreta
+Repetições com falha: [1, 2, 3, 4, 5]
+Consistência: 5/5
+Mensagem: assert 200 == 401
+
+Configuração: C
+Categoria: integracao
+Teste: tests.integracao.routes.test_auth_routes::test_login_senha_invalida
+Repetições com falha: [1, 2, 3, 4, 5]
+Consistência: 5/5
+Mensagem: assert 200 == 401
+ +  where 200 = <WrapperTestResponse streamed [200 OK]>.status_code
+
+Configuração: C
+Categoria: integracao
+Teste: tests.integracao.services.test_auth_service::test_login_senha_incorreta
+Repetições com falha: [1, 2, 3, 4, 5]
+Consistência: 5/5
+Mensagem: assert 200 == 401
+
+======================================================================
+VERSÃO: D4
+======================================================================
+
+Configuração A
+  Categoria: unitarios
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Detecção: NÃO
+  Repetições com detecção: 0/5
+
+Configuração B
+  Categoria: unitarios
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Categoria: integracao
+    Falhas por repetição: [1, 1, 1, 1, 1]
+    Repetições com falhas: 5/5
+  Detecção: SIM
+  Repetições com detecção: 5/5
+
+Configuração C
+  Categoria: unitarios
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Categoria: integracao
+    Falhas por repetição: [1, 1, 1, 1, 1]
+    Repetições com falhas: 5/5
+  Categoria: e2e
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Detecção: SIM
+  Repetições com detecção: 5/5
+
+----------------------------------------------------------------------
+CASOS DE TESTE COM FALHAS — D4
+----------------------------------------------------------------------
+
+Configuração: B
+Categoria: integracao
+Teste: tests.integracao.services.test_musica::test_criar_musica_duplicada
+Repetições com falha: [1, 2, 3, 4, 5]
+Consistência: 5/5
+Mensagem: assert 201 == 400
+
+Configuração: C
+Categoria: integracao
+Teste: tests.integracao.services.test_musica::test_criar_musica_duplicada
+Repetições com falha: [1, 2, 3, 4, 5]
+Consistência: 5/5
+Mensagem: assert 201 == 400
+
+======================================================================
+VERSÃO: D5
+======================================================================
+
+Configuração A
+  Categoria: unitarios
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Detecção: NÃO
+  Repetições com detecção: 0/5
+
+Configuração B
+  Categoria: unitarios
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Categoria: integracao
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Detecção: NÃO
+  Repetições com detecção: 0/5
+
+Configuração C
+  Categoria: unitarios
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Categoria: integracao
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Categoria: e2e
+    Falhas por repetição: [0, 0, 0, 0, 0]
+    Repetições com falhas: 0/5
+  Detecção: NÃO
+  Repetições com detecção: 0/5
+
+----------------------------------------------------------------------
+CASOS DE TESTE COM FALHAS — D5
+----------------------------------------------------------------------
+Nenhum caso de teste apresentou falhas.
+
+======================================================================
+MATRIZ DE DETECÇÃO DE DEFEITOS
+======================================================================
+Versão       A                         B                         C                        
+BASELINE     Não detectado             Não detectado             Não detectado            
+D1           unitarios                 unitarios                 unitarios                
+D2           Não detectado             integracao                integracao + e2e         
+D3           Não detectado             integracao                integracao               
+D4           Não detectado             integracao                integracao               
+D5           Não detectado             Não detectado             Não detectado            
+
+======================================================================
+TAXA DE DETECÇÃO POR CONFIGURAÇÃO
+======================================================================
+
+Configuração A
+  Defeitos introduzidos: 5
+  Defeitos detectados: 1
+  Defeitos não detectados: 4
+  Taxa de detecção: 20.00%
+
+Configuração B
+  Defeitos introduzidos: 5
+  Defeitos detectados: 4
+  Defeitos não detectados: 1
+  Taxa de detecção: 80.00%
+
+Configuração C
+  Defeitos introduzidos: 5
+  Defeitos detectados: 4
+  Defeitos não detectados: 1
+  Taxa de detecção: 80.00%
+
+Resumo de detecção exportado: /home/user/Documentos/catalog_music/analise/resultados/resumo_deteccao.csv
