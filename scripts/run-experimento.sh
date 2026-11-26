@@ -10,6 +10,7 @@ cd "$(dirname "$0")/.."
 VERSAO="${2:-piloto}"
 REPETICOES="${1:-1}"
 CENARIO_SELECIONADO="${3:-todos}"
+ORDEM_EXECUCAO="${4:-fixa}"
 
 if [[ "$CENARIO_SELECIONADO" != "todos" &&
       "$CENARIO_SELECIONADO" != "a" &&
@@ -29,6 +30,18 @@ if ! [[ "$REPETICOES" =~ ^[1-9][0-9]*$ ]]; then
     exit 1
 fi
 
+if [[ "$ORDEM_EXECUCAO" != "fixa" &&
+      "$ORDEM_EXECUCAO" != "balanceada" ]]; then
+    echo "Erro: ordem inválida. Use fixa ou balanceada."
+    exit 1
+fi
+
+if [[ "$ORDEM_EXECUCAO" == "balanceada" &&
+      "$CENARIO_SELECIONADO" != "todos" ]]; then
+    echo "Erro: a ordem balanceada exige a execução de todos os cenários."
+    exit 1
+fi
+
 # Diretório dos resultados
 IDENTIFICADOR="$(date -u +%Y%m%dt%H%M%Sz)-$$"
 
@@ -41,16 +54,17 @@ mkdir -p "$RESULTADOS"
 GIT_COMMIT="$(git rev-parse HEAD)"
 GIT_BRANCH="$(git branch --show-current)"
 
-printf 'identificador,versao,repeticoes_solicitadas,cenario_solicitado,git_commit,git_branch\n' \
+printf 'identificador,versao,repeticoes_solicitadas,cenario_solicitado,git_commit,git_branch,ordem_execucao\n' \
     > "$RESULTADOS/metadados.csv"
 
-printf '%s,%s,%s,%s,%s,%s\n' \
+printf '%s,%s,%s,%s,%s,%s,%s\n' \
     "$IDENTIFICADOR" \
     "$VERSAO" \
     "$REPETICOES" \
     "$CENARIO_SELECIONADO" \
     "$GIT_COMMIT" \
     "$GIT_BRANCH" \
+    "$ORDEM_EXECUCAO" \
     >> "$RESULTADOS/metadados.csv"
 
 # Arquivo de resumo
@@ -59,6 +73,9 @@ echo "versao,repeticao,cenario,categoria,tempo_segundos,codigo_saida" \
 
 echo "versao,repeticao,cenario,tempo_total_segundos,codigo_limpeza" \
     > "$RESULTADOS/resumo_cenarios.csv"
+
+echo "versao,repeticao,cenario,posicao" \
+    > "$RESULTADOS/ordem_execucao.csv"
 
 
 # Executa uma categoria de testes e registra seu resultado
@@ -187,16 +204,45 @@ executar_cenario() {
     echo "Código de saída da limpeza: $codigo_limpeza"
 }
 
+# Define a ordem de execução das configurações em cada repetição
 for ((REPETICAO=1; REPETICAO<=REPETICOES; REPETICAO++)); do
-
     if [[ "$CENARIO_SELECIONADO" == "todos" ]]; then
-        executar_cenario a
-        executar_cenario b
-        executar_cenario c
+
+        if [[ "$ORDEM_EXECUCAO" == "balanceada" ]]; then
+
+            case $(((REPETICAO - 1) % 6)) in
+                0) CENARIOS=(a b c) ;;
+                1) CENARIOS=(b c a) ;;
+                2) CENARIOS=(c a b) ;;
+                3) CENARIOS=(a c b) ;;
+                4) CENARIOS=(b a c) ;;
+                5) CENARIOS=(c b a) ;;
+            esac
+
+        else
+            CENARIOS=(a b c)
+        fi
+
     else
-        executar_cenario "$CENARIO_SELECIONADO"
+        CENARIOS=("$CENARIO_SELECIONADO")
     fi
 
+    POSICAO=1
+
+    for CENARIO_ATUAL in "${CENARIOS[@]}"; do
+
+        printf '%s,%s,%s,%s\n' \
+            "$VERSAO" \
+            "$REPETICAO" \
+            "$CENARIO_ATUAL" \
+            "$POSICAO" \
+            >> "$RESULTADOS/ordem_execucao.csv"
+
+        executar_cenario "$CENARIO_ATUAL"
+
+        POSICAO=$((POSICAO + 1))
+
+    done
 done
 
 echo ""
