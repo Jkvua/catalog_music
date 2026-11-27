@@ -1,0 +1,63 @@
+
+1. TEMPO TOTAL POR CONFIGURAÇÃO
+Versão | Configuração | Média | DP | Mínimo | Máximo | Amplitude | CV (%)
+baseline | A | 9.261 | 2.880 | 7.724 | 14.405 | 6.681 | 31.100
+baseline | B | 35.025 | 1.911 | 32.945 | 37.744 | 4.799 | 5.456
+baseline | C | 50.785 | 4.066 | 47.041 | 57.614 | 10.573 | 8.006
+baseline-complementar | A | 8.168 | 0.186 | 8.000 | 8.429 | 0.429 | 2.279
+baseline-complementar | B | 38.519 | 1.752 | 35.864 | 40.910 | 5.046 | 4.548
+baseline-complementar | C | 53.792 | 3.419 | 49.598 | 59.517 | 9.919 | 6.355
+
+2. PRIMEIRA EXECUÇÃO DA CONFIGURAÇÃO A
+Versão | Primeira | Média das demais | Diferença
+baseline | 14.405 | 7.975 | 6.430
+baseline-complementar | 8.000 | 8.201 | -0.201
+
+3. TEMPO TOTAL POR POSIÇÃO - BASELINE COMPLEMENTAR
+Configuração | Posição | Média
+A | 1 | 8.215
+A | 2 | 8.277
+A | 3 | 8.012
+B | 1 | 38.387
+B | 2 | 38.406
+B | 3 | 38.765
+C | 1 | 56.302
+C | 2 | 52.602
+C | 3 | 52.471
+
+4. TEMPOS EXTERNOS E INTERNOS DOS TESTES
+
+Versão: baseline
+Configuração | Categoria | Média externa | Média Pytest | Diferença média | DP externo | DP Pytest | DP diferença
+A | unitarios | 8.900 | 0.283 | 8.616 | 2.841 | 0.004 | 2.837
+B | unitarios | 7.493 | 0.285 | 7.209 | 0.112 | 0.004 | 0.113
+B | integracao | 27.128 | 24.827 | 2.301 | 1.951 | 1.907 | 0.134
+C | unitarios | 7.579 | 0.280 | 7.299 | 0.073 | 0.003 | 0.075
+C | integracao | 27.885 | 25.650 | 2.234 | 3.677 | 3.630 | 0.089
+C | e2e | 14.807 | 1.025 | 13.782 | 0.357 | 0.006 | 0.360
+
+Testes unitários da configuração A:
+Repetição | Externo | Pytest | Diferença
+1 | 13.976 | 0.290 | 13.686
+2 | 7.698 | 0.284 | 7.414
+3 | 7.763 | 0.282 | 7.481
+4 | 7.426 | 0.281 | 7.145
+5 | 7.635 | 0.280 | 7.355
+
+Versão: baseline-complementar
+Configuração | Categoria | Média externa | Média Pytest | Diferença média | DP externo | DP Pytest | DP diferença
+A | unitarios | 7.769 | 0.293 | 7.476 | 0.176 | 0.009 | 0.175
+B | unitarios | 7.964 | 0.299 | 7.665 | 0.258 | 0.008 | 0.258
+B | integracao | 29.935 | 27.499 | 2.435 | 1.628 | 1.669 | 0.075
+C | unitarios | 7.773 | 0.301 | 7.472 | 0.172 | 0.010 | 0.166
+C | integracao | 30.584 | 28.037 | 2.547 | 3.341 | 3.405 | 0.221
+C | e2e | 14.933 | 1.064 | 13.869 | 0.273 | 0.022 | 0.269
+
+Testes unitários da configuração A:
+Repetição | Externo | Pytest | Diferença
+1 | 7.689 | 0.286 | 7.403
+2 | 7.680 | 0.308 | 7.372
+3 | 7.784 | 0.297 | 7.487
+4 | 7.929 | 0.295 | 7.634
+5 | 8.004 | 0.289 | 7.715
+6 | 7.526 | 0.283 | 7.243
